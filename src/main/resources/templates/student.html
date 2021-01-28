@@ -5,16 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-<form method="post" action="filter">
+<form th:action="@{/filter}" method="post">
     <label>
         <input type="text" name="filter"/>
     </label>
+    <br/>
     <button type="submit">Find students</button>
-    <button onclick="alert('hello')">Get back</button>
 </form>
+<a href="/">Get back</a>
+
 <table>
     <thead>
     <tr>
+        <th> Email </th>
         <th> Login </th>
         <th> Password </th>
     </tr>
@@ -25,6 +28,7 @@
     </tr>
     <tr th:each="student : ${students}">
         <td><span th:text="${student.email}"> Email </span></td>
+        <td><span th:text="${student.login}"> Login </span></td>
         <td><span th:text="${student.password}"> Password </span></td>
     </tr>
     </tbody>
