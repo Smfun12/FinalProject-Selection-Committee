@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{welcome}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<button type="button" style="width: 150px;background-color: red; float: right;" th:text="#{switch-en}" onclick="window.location.href='http://localhost:8080/?localeData=en'"></button>
+<button type="button" style="width: 150px; background-color:yellow;float: right;
+    " th:text="#{switch-ua}" onclick="window.location.href='http://localhost:8080/?localeData=ua'"></button>
+<div class="col-md-8 col-md-offset-2">
+    <h1 th:text="#{login-form}" style="margin: 50px;"></h1>
+</div>
+<div class="container" style="margin-top: 60px">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2 class="page-header" th:text="#{login-demo}"></h2>
+            <form style="margin-bottom: 30px" name="form" autocomplete="off" novalidate action="#" th:action="@{/}"
+            method="post">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" th:text="#{email}"></label>
+                    <input type="email"
+                           name="login"
+                           th:placeholder="#{email}"
+                           class="form-control"
+                           id="exampleInputEmail1"
+                           required
+                           >
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1" th:text="#{password}"></label>
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           id="exampleInputPassword1"
+                           th:placeholder="#{password}"
+                           required>
+                </div>
+                <button type="submit"  th:text="#{submit}" class="btn btn-default" style="margin-top:30px;
+                background-color: deepskyblue;">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
