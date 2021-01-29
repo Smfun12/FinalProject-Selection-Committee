@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Security Example </title>
+    <link rel="stylesheet" href="/static/login.css" />
 </head>
 <body>
 Login page
@@ -12,7 +13,7 @@ Login page
 <!--            type="hidden"-->
 <!--            th:name="${_csrf.parameterName}"-->
 <!--            th:value="${_csrf.token}" />-->
-    <div><input type="submit" value="Sign In"/></div>
+    <div class="login-button"><input type="submit" value="Sign In"/></div>
 </form>
 <a href="/registration">Add new user</a>
 </body>

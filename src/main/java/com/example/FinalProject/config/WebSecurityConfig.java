@@ -20,7 +20,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/registration", "/students","/filter").permitAll()
+                .antMatchers("/", "/registration", "/students","/filter",
+                        "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -40,4 +41,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery("select s.email, sr.roles from students s " +
                         "inner join students_role sr on s.id = sr.student_id where s.email=?");
     }
+
 }
