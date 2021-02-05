@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link  rel="stylesheet" href="/static/hello.css"/>
+</head>
+<body>
+<div class="language">
+    <button type="button" id="en" onclick="window.location.href='http://localhost:8080/student?localeData=en'">
+        <img src="https://media.flaticon.com/dist/min/img/flags/en.svg" alt="flag" width="30" height="20"/>
+    </button>
+    <button type="button" id="ua" onclick="window.location.href='http://localhost:8080/student?localeData=ua'">
+        <img src="
+    https://www.flaticon.com/svg/vstatic/svg/555/555614.svg?token=exp=1612353589~hmac=224d3d6386f9c181db46aee9b06cfbba"
+             alt="ua" width="40" height="30"/>
+    </button>
+</div>
+<a href="/student">Student List</a>
+<form th:action="@{/filter}" method="post">
+    <label>
+        <input type="text" name="filter"/>
+    </label>
+    <br/>
+    <button type="submit">Find students</button>
+</form>
+<a href="/">Get back</a>
+
+<table>
+    <thead>
+    <tr>
+        <th> Email </th>
+        <th> Login </th>
+        <th> Password </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${students.empty}">
+        <td colspan="2"> No Students Available </td>
+    </tr>
+    <tr th:each="student : ${students}">
+        <td><span th:text="${student.email}"> Email </span></td>
+        <td><span th:text="${student.login}"> Login </span></td>
+        <td><span th:text="${student.password}"> Password </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
