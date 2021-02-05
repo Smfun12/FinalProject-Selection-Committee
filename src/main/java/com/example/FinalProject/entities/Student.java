@@ -1,9 +1,11 @@
 package com.example.FinalProject.entities;
 
+import lombok.Builder;
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
-
 @Entity
 @Table(name = "students")
 public class Student {
@@ -14,7 +16,10 @@ public class Student {
     private String email;
 
     @NotNull
+    @Length(min = 5)
     private String login;
+    @NotNull
+    @Length(max = 10)
     private String password;
 
     public Set<Roles> getRolesSet() {
@@ -33,11 +38,12 @@ public class Student {
     public Student() {
 
     }
-    public Student(String email,String password,String login) {
+    @Builder
+    public Student(String email,String password,String login, Set<Roles> rolesSet) {
         this.email = email;
         this.password = password;
         this.login = login;
-
+        this.rolesSet = rolesSet;
     }
     public String getLogin() {
         return login;

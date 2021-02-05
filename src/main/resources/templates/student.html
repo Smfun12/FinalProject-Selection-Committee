@@ -5,31 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/filter}" method="post">
-    <label>
-        <input type="text" name="filter"/>
-    </label>
-    <br/>
-    <button type="submit">Find students</button>
-</form>
-<a href="/">Get back</a>
-
+List of students
 <table>
     <thead>
     <tr>
-        <th> Email </th>
         <th> Login </th>
-        <th> Password </th>
+        <th> Role </th>
     </tr>
     </thead>
     <tbody>
-    <tr th:if="${students.empty}">
-        <td colspan="2"> No Students Available </td>
-    </tr>
     <tr th:each="student : ${students}">
         <td><span th:text="${student.email}"> Email </span></td>
-        <td><span th:text="${student.login}"> Login </span></td>
-        <td><span th:text="${student.password}"> Password </span></td>
+        <td><span th:text="${student.rolesSet}"></span></td>
+        <td><a href="/student/${student.id}}">edit</a> </td>
     </tr>
     </tbody>
 </table>

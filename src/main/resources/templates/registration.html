@@ -2,19 +2,55 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Security Example </title>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body>
-Add new user
 
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" th:name="login"/> </label></div>
-    <div><label> Password: <input type="password" th:name="password"/> </label></div>
-<!--    <input-->
-<!--            type="hidden"-->
-<!--            th:name="${_csrf.parameterName}"-->
-<!--            th:value="${_csrf.token}" />-->
-    <div><input type="submit" value="Sign In"/></div>
+<!------ Include the above in your HEAD tag ---------->
+
+<form class="form-horizontal" th:action="@{/registration}" method="post">
+    <fieldset>
+        <div id="legend">
+            <legend class="">Register</legend>
+        </div>
+        <div class="control-group">
+            <!-- Username -->
+            <label class="control-label" th:name="login">Username</label>
+            <div class="controls">
+                <input type="text" id="username" name="login" placeholder="" class="input-xlarge">
+                <p class="help-block">Username can contain any letters or numbers, without spaces, min length 5</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- E-mail -->
+            <label class="control-label" for="email" th:name="email">E-mail</label>
+            <div class="controls">
+                <input type="text" id="email" name="email" placeholder="" class="input-xlarge">
+                <p class="help-block">Please provide your E-mail</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="password" th:name="password">Password</label>
+            <div class="controls">
+                <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+                <p class="help-block">Password should be at least 4 characters and at most 10 characters</p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!-- Button -->
+            <div class="controls">
+                <button type="submit" class="btn btn-success">Register</button>
+            </div>
+        </div>
+    </fieldset>
 </form>
-<a href="/registration">Add new user</a>
+<p th:text="${student}" style="color: red; font-size: 24px;"></p>
+<p th:text="${error}" style="color: red; font-size: 24px;"></p>
 </body>
 </html>
