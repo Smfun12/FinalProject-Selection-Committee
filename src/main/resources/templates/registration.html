@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Security Example </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -20,7 +21,7 @@
             <label class="control-label" th:name="login">Username</label>
             <div class="controls">
                 <input type="text" id="username" name="login" placeholder="" class="input-xlarge">
-                <p class="help-block">Username can contain any letters or numbers, without spaces, min length 5</p>
+                <p class="help-block">Username can contain any letters or numbers,min length 5</p>
             </div>
         </div>
 
@@ -41,6 +42,30 @@
                 <p class="help-block">Password should be at least 4 characters and at most 10 characters</p>
             </div>
         </div>
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="city" th:name="city">City</label>
+            <div class="controls">
+                <input type="text" id="city" name="city" placeholder="" class="input-xlarge">
+                <p class="help-block">City should contain min 4 characters</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="district" th:name="district">District</label>
+            <div class="controls">
+                <input type="text" id="district" name="district" placeholder="" class="input-xlarge">
+                <p class="help-block">District should contain min 4 characters</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <!-- Password-->
+            <label class="control-label" for="school" th:name="school">School</label>
+            <div class="controls">
+                <input type="text" id="school" name="school" placeholder="" class="input-xlarge">
+                <p class="help-block">School should contain min 4 characters</p>
+            </div>
+        </div>
 
         <div class="control-group">
             <!-- Button -->
@@ -52,5 +77,8 @@
 </form>
 <p th:text="${student}" style="color: red; font-size: 24px;"></p>
 <p th:text="${error}" style="color: red; font-size: 24px;"></p>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

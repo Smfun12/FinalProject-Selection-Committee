@@ -3,6 +3,8 @@ package com.example.FinalProject.controller;
 import com.example.FinalProject.entities.Roles;
 import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.repository.StudentRepository;
+import com.example.FinalProject.services.StudentService;
+import com.example.FinalProject.services.StudentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,8 @@ import java.util.Optional;
 public class RegistrationController {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
+
     @GetMapping("/registration")
     public String registration(){
         return "registration";
@@ -28,7 +31,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addStudent(@Valid Student student, BindingResult result, Model model){
-        Optional<Student> student1 = studentRepository.findByLogin(student.getLogin());
+        Optional<Student> student1 = studentService.findByLogin(student.getLogin());
         if (result.hasErrors()){
             model.addAttribute("error","Check user credentials");
             log.info("some error");
@@ -43,9 +46,13 @@ public class RegistrationController {
                 email(student.getEmail())
                 .login(student.getLogin())
                 .password(student.getPassword())
-                .rolesSet(Collections.singleton(Roles.USER))
+                .city(student.getCity())
+                .district(student.getDistrict())
+                .school(student.getSchool())
+                .rolesSet(Collections.singleton(Roles.ADMIN))
                 .build();
-        studentRepository.save(student2);
+        log.info(student2.toString());
+        studentService.saveStudent(student2);
         return "redirect:/login";
     }
 }
