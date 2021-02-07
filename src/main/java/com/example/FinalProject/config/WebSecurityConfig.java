@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
                 .usersByUsernameQuery("select email, password, login from students where email=?")
                 .authoritiesByUsernameQuery("select s.email, sr.roles from students s " +
-                        "inner join students_role sr on s.id = sr.student_id where s.email=?");
+                        "inner join students_role sr on s.id = sr.studentid where s.email=?");
     }
 
 }

@@ -39,10 +39,23 @@
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Total Places</th>
-        <th scope="col">Budget Places</th>
-        <th scope="col">Contract Places</th>
+        <th scope="col">
+            <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
+                Title</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=totalPlaces&sortDir=' + ${reverseSortDir}}">
+                Total Places</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=budgetPlaces&sortDir=' + ${reverseSortDir}}">
+                Budget Places</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=contractPlaces&sortDir=' + ${reverseSortDir}}">
+                Contract Places</a>
+        </th>
+        <th scope="col">Actions</th>
         <th scope="col">
 
             <form th:action="@{/filterFaculty}" method="post">
@@ -57,18 +70,43 @@
     </thead>
     <tbody>
     <tr th:each="faculty : ${faculties}">
-        <th scope="row"><span th:text="${faculty.faculty_id}"></span></th>
+        <th scope="row"><span th:text="${faculty.facultyid}"></span></th>
         <td><span th:text="${faculty.title}"></span></td>
         <td><span th:text="${faculty.totalPlaces}"></span></td>
         <td><span th:text="${faculty.budgetPlaces}"></span></td>
         <td><span th:text="${faculty.contractPlaces}"></span></td>
-        <td><a href="/faculty/${faculty.faculty_id}}">edit</a></td>
+        <td>
+            <a class="btn btn-info" href="/student/${student.id}}" role="button">Update</a>
+        <a class="btn btn-danger" href="/student/${student.id}}" role="button">Delete</a>
+        </td>
     </tr>
     </tbody>
-    <form th:action="@{/faculty/addFaculty}" sec:authorize="hasRole('ADMIN')" method="get">Text visible to admin.
-        <button type="submit">Add faculty</button>
-    </form>
 </table>
+<div th:if = "${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2">
+            Total Rows: [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage > 1}" th:href="@{'/faculty/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+            <span th:unless="${currentPage > 1}">Previous</span>
+        </div>
+        <div class="col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/faculty/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/faculty/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+            <span th:unless="${currentPage < totalPages}">Next</span>
+        </div>
+
+    </div>
+</div>
+<form th:action="@{/faculty/addFaculty}" method="get">
+    <button type="submit" class="btn btn-primary">Add faculty</button>
+</form>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

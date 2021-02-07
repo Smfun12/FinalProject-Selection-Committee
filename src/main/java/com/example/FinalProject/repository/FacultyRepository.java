@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
-        List<Faculty> findByTitle(String title);
+        Optional<Faculty> findByTitle(String title);
 
         List<Faculty> findByTotalPlaces(int totalPlaces);
 

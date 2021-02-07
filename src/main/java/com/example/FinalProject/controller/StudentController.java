@@ -25,13 +25,16 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @GetMapping("/findStudent")
+    public String findStudent(Model model) {
+        return findPaginated(1,"studentid","asc",model);
+    }
+
+
     @PreAuthorize("hasRole('ADMIN')")
-
-
     @GetMapping("/student")
     public String studentList(Model model){
-        model.addAttribute("students",studentService.getStudents());
-        return "findStudent";
+        return findPaginated(1,"studentid","asc",model);
     }
 
     @GetMapping("/student/{student}")
@@ -49,24 +52,41 @@ public class StudentController {
         return "redirect:/findStudent";
 
     }
-    @GetMapping("/student/{id}")
-    public String deleteStudent(@PathVariable (value = "id") long id){
-        studentService.deleteStudentById(id);
+
+    @GetMapping("/showFormForUpdate/{studentid}")
+    public String updateStudent(@PathVariable(value = "studentid")long studentid,Model model){
+        Student student = studentService.findStudentById(studentid).get();
+
+        model.addAttribute("student",student);
+        return "update_student";
+    }
+
+    @PostMapping("/delete_student")
+    public String deleteStudent(Student student, Model model){
+//        studentService.deleteStudentById(studentid);
         return "redirect:/findStudent";
     }
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable (value = "pageNo") int pageNo,
-                                Model model){
+    @GetMapping("/student/page/{pageNo}")
+    public String findPaginated(
+            @PathVariable (value = "pageNo") int pageNo,
+            @RequestParam("sortField") String sortField,
+            @RequestParam("sortDir") String sortDir,
+            Model model){
         int pageSize = 5;
 
-        Page<Student> page = studentService.findPaginated(pageNo, pageSize);
+        Page<Student> page = studentService.findPaginated(pageNo, pageSize,sortField,sortDir);
         List<Student> studentList = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("studentList", studentList);
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+
+        model.addAttribute("students", studentList);
         return "findStudent";
     }
 }

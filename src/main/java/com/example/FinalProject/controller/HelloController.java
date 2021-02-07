@@ -31,21 +31,6 @@ public class HelloController {
         return "mainPage"; // <--- 2
     }
 
-    @GetMapping("/findStudent")
-    public String findStudent(Model model) {
-        Iterable<Student> iterable = studentRepository.findAll();
-        model.addAttribute("students", iterable);
-        return "findStudent";
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @GetMapping("/findFaculty")
-    public String findFaculty(Model model) {
-        Iterable<Faculty> iterable = facultyRepository.findAll();
-        model.addAttribute("faculties", iterable);
-        return "findFaculty";
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/filterStudent")
     public String find(@RequestParam String filter, Model model) {
@@ -65,11 +50,10 @@ public class HelloController {
         List<Faculty> faculties;
         if (filter != null && filter.isEmpty()) {
             faculties = facultyRepository.findAll();
-
+            model.addAttribute("faculties", faculties);
         } else {
-            faculties = facultyRepository.findByTitle(filter);
+            model.addAttribute("faculties", facultyRepository.findByTitle(filter).get());
         }
-        model.addAttribute("faculties", faculties);
         return "findFaculty";
     }
     @GetMapping("/login")
@@ -82,10 +66,5 @@ public class HelloController {
         Iterable<Student> iterable = studentRepository.findAll();
         model.addAttribute("name", iterable);
         return "findStudent";
-    }
-
-    @GetMapping("/addFaculty")
-    public String addFacultyPage(){
-        return "addFaculty";
     }
 }

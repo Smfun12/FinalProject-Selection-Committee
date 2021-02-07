@@ -4,8 +4,10 @@ import com.example.FinalProject.entities.Faculty;
 import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.repository.FacultyRepository;
 import com.example.FinalProject.repository.StudentRepository;
+import com.example.FinalProject.services.FacultyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,42 +20,42 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/faculty")
 @PreAuthorize("hasAuthority('ADMIN')")
 @Slf4j
 public class FacultyController {
 
     @Autowired
-    private FacultyRepository facultyRepository;
+    private FacultyService facultyService;
 
-
-
-    @GetMapping
+    @GetMapping("/findFaculty")
     public String facultyList(Model model){
-        model.addAttribute("faculties",facultyRepository.findAll());
-        return "findFaculty";
+        return findFacultyPaginated(1,"title","asc",model);
     }
 
-    @GetMapping("{faculty}")
+    @GetMapping("/faculty/{faculty}")
     public String facultyEdit(@PathVariable Faculty faculty, Model model){
         model.addAttribute("faculties",faculty);
         return "facultyEdit";
     }
-    @PostMapping("/addFaculty")
+
+    @GetMapping("/faculty/addFaculty")
+    public String addFacultyPage(){
+        return "addFaculty";
+    }
+
+    @PostMapping("/faculty/addFaculty")
     public String addFaculty(
             @Valid Faculty faculty, BindingResult result, Model model){
-        List<Faculty> facultyList= facultyRepository.findByTitle(faculty.getTitle());
+        Optional<Faculty> facultyList= facultyService.findByTitle(faculty.getTitle());
         if (result.hasErrors()){
             model.addAttribute("error","Check faculty credentials");
             log.info("some error");
             return "addFaculty";
         }
-        for (Faculty faculty1 : facultyList) {
-            if (faculty.getTitle().equals(faculty1.getTitle())) {
-                model.addAttribute("faculty", "Faculty exists");
-                log.info("Faculty" + facultyList + " exists");
-                return "addFaculty";
-            }
+        if (facultyList.isPresent()){
+            model.addAttribute("faculty", "Faculty exists");
+            log.info("Faculty" + facultyList + " exists");
+            return "addFaculty";
         }
         Faculty faculty2 = Faculty.builder()
                 .title(faculty.getTitle())
@@ -61,6 +63,29 @@ public class FacultyController {
                 .budgetPlaces(faculty.getBudgetPlaces())
                 .contractPlaces(faculty.getContractPlaces())
                 .build();
-        facultyRepository.save(faculty2);
+        facultyService.saveFaculty(faculty2);
         return "redirect:/findFaculty";
-    }}
+    }
+    @GetMapping("faculty/page/{pageNo}")
+    public String findFacultyPaginated(
+            @PathVariable (value = "pageNo") int pageNo,
+            @RequestParam("sortField") String sortField,
+            @RequestParam("sortDir") String sortDir,
+                Model model){
+        int pageSize = 5;
+
+        Page<Faculty> page = facultyService.findFacultyPaginated(pageNo, pageSize,sortField,sortDir);
+        List<Faculty> facultyList = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDir",sortDir.equals("asc")?"desc":"asc");
+
+        model.addAttribute("faculties", facultyList);
+        return "findFaculty";
+    }
+}

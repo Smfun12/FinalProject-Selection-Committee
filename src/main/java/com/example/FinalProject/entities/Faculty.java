@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import java.util.Set;
 
 @Entity
 @Table(name = "faculties")
@@ -14,17 +13,14 @@ public class Faculty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "faculty_id")
-    private long faculty_id;
+    @Column(name = "facultyid")
+    private long facultyid;
 
     @NotBlank
     @Length(min = 3)
     @Column(name = "title")
     private String title;
 
-    @Positive
-    @Column(name = "totalPlaces")
-    private int totalPlaces;
 
     @Positive
     @Column(name = "budgetPlaces")
@@ -34,13 +30,14 @@ public class Faculty {
     @Column(name = "contractPlaces")
     private int contractPlaces;
 
+    @Positive
+    @Column(name = "totalPlaces")
+    private int totalPlaces;
+
+
 //    @OneToMany
 //    @CollectionTable(name = "students", joinColumns = @JoinColumn(name = "faculty_id"))
 //    private Set<Student> studentSet;
-
-    private Faculty(){
-
-    }
 
     @Builder
     public Faculty(@NotBlank @Length(min = 10) String title, @Positive int totalPlaces,
@@ -51,12 +48,16 @@ public class Faculty {
         this.contractPlaces = contractPlaces;
     }
 
-    public long getFaculty_id() {
-        return faculty_id;
+    public Faculty() {
+
     }
 
-    public void setFaculty_id(long faculty_id) {
-        this.faculty_id = faculty_id;
+    public long getFacultyid() {
+        return facultyid;
+    }
+
+    public void setFacultyid(long faculty_id) {
+        this.facultyid = faculty_id;
     }
 
     public String getTitle() {
@@ -94,7 +95,7 @@ public class Faculty {
     @Override
     public String toString() {
         return "Faculty{" +
-                "faculty_id=" + faculty_id +
+                "faculty_id=" + facultyid +
                 ", title='" + title + '\'' +
                 ", totalPlaces=" + totalPlaces +
                 ", budgetPlaces=" + budgetPlaces +

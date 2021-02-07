@@ -12,7 +12,7 @@ import java.util.Set;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long student_id;
+    private long studentid;
     @NotNull
     @Email(message = "Email cannot be null")
     @Column(name = "email")
@@ -53,7 +53,7 @@ public class Student {
     }
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "student_role", joinColumns = @JoinColumn(name = "student_id"))
+    @CollectionTable(name = "student_role", joinColumns = @JoinColumn(name = "studentid"))
     @Enumerated(EnumType.STRING)
     private Set<Roles> rolesSet;
 
@@ -100,12 +100,12 @@ public class Student {
         this.email = login;
     }
 
-    public long getStudent_id() {
-        return student_id;
+    public long getStudentid() {
+        return studentid;
     }
 
-    public void setStudent_id(long student_id) {
-        this.student_id = student_id;
+    public void setStudentid(long studentid) {
+        this.studentid = studentid;
     }
 
 
@@ -135,7 +135,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "student_id=" + student_id +
+                "studentid=" + studentid +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +

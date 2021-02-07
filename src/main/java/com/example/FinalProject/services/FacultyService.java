@@ -1,5 +1,6 @@
 package com.example.FinalProject.services;
 
+import com.example.FinalProject.entities.Faculty;
 import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentService {
-    List<Student> getStudents();
-    Optional<Student> findByLogin(String login);
-    List<Student> findByEmail(String email);
-    Optional<Student> findStudentById(long id);
-    void saveStudent(Student student);
-    void deleteStudentById(long id);
-    Page<Student> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
+public interface FacultyService {
+    List<Faculty> getFaculties();
+    Optional<Faculty> findByTitle(String title);
+    void saveFaculty(Faculty faculty);
+    void deleteFacultyById(long id);
+    Page<Faculty> findFacultyPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 }

@@ -38,14 +38,33 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Email</th>
-        <th scope="col">Login</th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=studentid&sortDir=' + ${reverseSortDir}}">
+                #</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                Email</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=login&sortDir=' + ${reverseSortDir}}">
+                Login</a>
+        </th>
         <th scope="col">Password</th>
-        <th scope="col">City</th>
-        <th scope="col">District</th>
-        <th scope="col">School</th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=city&sortDir=' + ${reverseSortDir}}">
+                City</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=district&sortDir=' + ${reverseSortDir}}">
+                District</a>
+        </th>
+        <th scope="col">
+            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=school&sortDir=' + ${reverseSortDir}}">
+                School</a>
+        </th>
         <th scope="col">Role</th>
+        <th scope="col">Actions</th>
         <th scope="col">
             <form th:action="@{/filterStudent}" method="post">
                 <label>
@@ -58,7 +77,7 @@
     </thead>
     <tbody>
     <tr th:each="student : ${students}">
-        <th scope="row"><span th:text="${student.student_id}"></span></th>
+        <th scope="row"><span th:text="${student.studentid}"></span></th>
         <td><span th:text="${student.email}"></span></td>
         <td><span th:text="${student.login}"></span></td>
         <td><span th:text="${student.password}"></span></td>
@@ -66,17 +85,35 @@
         <td><span th:text="${student.district}"></span></td>
         <td><span th:text="${student.school}"></span></td>
         <td><span th:text="${student.rolesSet}"></span></td>
-        <td><a href="/student/${student.id}}">edit</a> </td>
+        <td><a class="btn btn-info" th:href="@{/showFormForUpdate/{studentid}(studentid=${student.studentid})}">Update</a>
+        </td>
     </tr>
 
     </tbody>
-    <div th:if="${studentPage.totalPages > 0}" class="pagination"
-         th:each="pageNumber : ${pageNumbers}">
-        <a th:href="@{/listBooks(size=${studentPage.size}, page=${pageNumber})}"
-           th:text="${pageNumber}"
-           th:class="${pageNumber==studentPage.number + 1} ? active"></a>
-    </div>
+
 </table>
+<div th:if = "${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2">
+            Total Rows: [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage > 1}" th:href="@{'/student/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+            <span th:unless="${currentPage > 1}">Last</span>
+        </div>
+        <div class="col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                        <a th:if="${currentPage != i}" th:href="@{'/student/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}" th:href="@{'/student/page/' + ${currentPage+1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+            <span th:unless="${currentPage < totalPages}">Next</span>
+        </div>
+
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
