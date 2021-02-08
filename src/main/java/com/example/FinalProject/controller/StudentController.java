@@ -64,7 +64,17 @@ public class StudentController {
         studentService.deleteStudentById(studentid);
         return "redirect:/findStudent";
     }
+    @GetMapping("/disableStudent/{studentid}")
+    public String disableStudent(@PathVariable(value = "studentid")long studentid,Model model){
+        studentService.disableStudentById(studentid);
+        return "redirect:/findStudent";
+    }
 
+    @GetMapping("/enableStudent/{studentid}")
+    public String enableStudent(@PathVariable(value = "studentid")long studentid,Model model){
+        studentService.enableStudentById(studentid);
+        return "redirect:/findStudent";
+    }
     @GetMapping("/student/page/{pageNo}")
     public String findPaginated(
             @PathVariable (value = "pageNo") int pageNo,

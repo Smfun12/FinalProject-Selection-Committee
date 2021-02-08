@@ -1,5 +1,7 @@
 package com.example.FinalProject.config;
 
+import com.example.FinalProject.services.StudentDetailsImpl;
+import com.example.FinalProject.services.StudentDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,11 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
+
+    @Bean
+    public UserDetailsService studentDetails(){
+        return new StudentDetailsServiceImpl();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

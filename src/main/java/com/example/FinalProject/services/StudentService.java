@@ -21,5 +21,8 @@ public interface StudentService {
     Optional<Student> findStudentById(long id);
     void saveStudent(Student student);
     void deleteStudentById(long id);
+    void disableStudentById(long id);
     Page<Student> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
+
+    void enableStudentById(long studentid);
 }

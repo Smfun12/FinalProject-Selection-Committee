@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Controller
@@ -49,7 +50,7 @@ public class RegistrationController {
                 .city(student.getCity())
                 .district(student.getDistrict())
                 .school(student.getSchool())
-                .rolesSet(Collections.singleton(Roles.USER))
+                .rolesSet(student.getRolesSet())
                 .build();
         log.info(student2.toString());
         studentService.saveStudent(student2);

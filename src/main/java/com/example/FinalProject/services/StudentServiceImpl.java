@@ -50,10 +50,24 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public void disableStudentById(long id) {
+        Optional<Student> student = studentRepository.findById(id);
+        student.get().setEnabled(false);
+        studentRepository.save(student.get());
+    }
+
+    @Override
     public Page<Student> findPaginated(int pageNo, int pageSize,String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize,sort);
         return studentRepository.findAll(pageable);
+    }
+
+    @Override
+    public void enableStudentById(long studentid) {
+        Optional<Student> student = studentRepository.findById(studentid);
+        student.get().setEnabled(true);
+        studentRepository.save(student.get());
     }
 }

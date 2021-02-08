@@ -82,16 +82,26 @@
     <tbody>
     <tr th:each="student : ${students}">
         <th scope="row"><span th:text="${student.studentid}"></span></th>
-        <td><span th:text="${student.email}"></span></td>
-        <td><span th:text="${student.login}"></span></td>
-        <td><span th:text="${student.password}"></span></td>
-        <td><span th:text="${student.city}"></span></td>
-        <td><span th:text="${student.district}"></span></td>
-        <td><span th:text="${student.school}"></span></td>
+        <td th:if="${student.enabled}"><span th:text="${student.email}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger"><span th:text="#{blocked}"></span></td>
+        <td th:if="${student.enabled}"><span th:text="${student.login}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger" ><span th:text="${student.login}"></span></td>
+        <td th:if="${student.enabled}"><span th:text="${student.password}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger"><span th:text="${student.password}"></span></td>
+        <td th:if="${student.enabled}"><span th:text="${student.city}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger" ><span th:text="${student.city}"></span></td>
+        <td th:if="${student.enabled}" ><span th:text="${student.district}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger" ><span th:text="${student.district}"></span></td>
+        <td th:if="${student.enabled}" ><span th:text="${student.school}"></span></td>
+        <td th:if="${not student.enabled}" class="table-danger" ><span th:text="${student.school}"></span></td>
         <td><span th:text="${student.rolesSet}"></span></td>
         <td><a class="btn btn-info" th:href="@{/showFormForUpdate/{studentid}(studentid=${student.studentid})}" th:text="#{update}"></a>
             <a class="btn btn-danger" th:href="@{/deleteStudent/{studentid}(studentid=${student.studentid})}" th:text="#{delete}"></a>
+            <a th:if="${student.enabled}" class="btn btn-warning" th:href="@{/disableStudent/{studentid}(studentid=${student.studentid})}" th:text="#{disable}">Disable</a>
+            <a th:if="${not student.enabled}" class="btn btn-warning" th:href="@{/enableStudent/{studentid}(studentid=${student.studentid})}" th:text="#{enable}">Enable</a>
+
         </td>
+
     </tr>
 
     </tbody>

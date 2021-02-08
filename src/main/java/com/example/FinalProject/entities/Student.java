@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 @Entity
 @Table(name = "students")
@@ -52,10 +53,24 @@ public class Student {
         this.rolesSet = rolesSet;
     }
 
-    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "student_role", joinColumns = @JoinColumn(name = "studentid"))
-    @Enumerated(EnumType.STRING)
-    private Set<Roles> rolesSet;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_roles",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Roles> rolesSet = new HashSet<>();
+
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public Student() {
 
