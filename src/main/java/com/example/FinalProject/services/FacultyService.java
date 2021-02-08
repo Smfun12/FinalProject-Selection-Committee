@@ -18,6 +18,7 @@ import java.util.Optional;
 public interface FacultyService {
     List<Faculty> getFaculties();
     Optional<Faculty> findByTitle(String title);
+    Optional<Faculty> findByFacultyById(long id);
     void saveFaculty(Faculty faculty);
     void deleteFacultyById(long id);
     Page<Faculty> findFacultyPaginated(int pageNo, int pageSize, String sortField, String sortDirection);

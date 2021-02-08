@@ -49,7 +49,7 @@ public class RegistrationController {
                 .city(student.getCity())
                 .district(student.getDistrict())
                 .school(student.getSchool())
-                .rolesSet(Collections.singleton(Roles.ADMIN))
+                .rolesSet(Collections.singleton(Roles.USER))
                 .build();
         log.info(student2.toString());
         studentService.saveStudent(student2);

@@ -14,63 +14,63 @@
 <form class="form-horizontal" th:action="@{/registration}" method="post">
     <fieldset>
         <div id="legend">
-            <legend class="">Register</legend>
+            <legend class="" th:text="#{register}"></legend>
         </div>
         <div class="control-group">
             <!-- Username -->
-            <label class="control-label" th:name="login">Username</label>
+            <label class="control-label" th:name="login" th:text="#{username}"></label>
             <div class="controls">
                 <input type="text" id="username" name="login" placeholder="" class="input-xlarge">
-                <p class="help-block">Username can contain any letters or numbers,min length 5</p>
+                <p class="help-block" th:text="#{valid_login}"></p>
             </div>
         </div>
 
         <div class="control-group">
             <!-- E-mail -->
-            <label class="control-label" for="email" th:name="email">E-mail</label>
+            <label class="control-label" for="email" th:name="email" th:text="#{email}"></label>
             <div class="controls">
                 <input type="text" id="email" name="email" placeholder="" class="input-xlarge">
-                <p class="help-block">Please provide your E-mail</p>
+                <p class="help-block" th:text="#{valid_email}"></p>
             </div>
         </div>
 
         <div class="control-group">
             <!-- Password-->
-            <label class="control-label" for="password" th:name="password">Password</label>
+            <label class="control-label" for="password" th:name="password" th:text="#{password}"></label>
             <div class="controls">
                 <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
-                <p class="help-block">Password should be at least 4 characters and at most 10 characters</p>
+                <p class="help-block" th:text="#{valid_password}"></p>
             </div>
         </div>
         <div class="control-group">
             <!-- Password-->
-            <label class="control-label" for="city" th:name="city">City</label>
+            <label class="control-label" for="city" th:name="city" th:text="#{city}"></label>
             <div class="controls">
                 <input type="text" id="city" name="city" placeholder="" class="input-xlarge">
-                <p class="help-block">City should contain min 4 characters</p>
+                <p class="help-block" th:text="#{valid_city}"></p>
             </div>
         </div>
         <div class="control-group">
             <!-- Password-->
-            <label class="control-label" for="district" th:name="district">District</label>
+            <label class="control-label" for="district" th:name="district" th:text="#{district}"></label>
             <div class="controls">
                 <input type="text" id="district" name="district" placeholder="" class="input-xlarge">
-                <p class="help-block">District should contain min 4 characters</p>
+                <p class="help-block" th:text="#{valid_district}"></p>
             </div>
         </div>
         <div class="control-group">
             <!-- Password-->
-            <label class="control-label" for="school" th:name="school">School</label>
+            <label class="control-label" for="school" th:name="school" th:text="#{school}"></label>
             <div class="controls">
                 <input type="text" id="school" name="school" placeholder="" class="input-xlarge">
-                <p class="help-block">School should contain min 4 characters</p>
+                <p class="help-block" th:text="#{valid_school}"></p>
             </div>
         </div>
 
         <div class="control-group">
             <!-- Button -->
             <div class="controls">
-                <button type="submit" class="btn btn-success">Register</button>
+                <button type="submit" class="btn btn-success" th:text="#{register}"></button>
             </div>
         </div>
     </fieldset>

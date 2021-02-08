@@ -43,11 +43,9 @@ public class StudentController {
         return "studentEdit";
     }
 
-    @PostMapping("/student")
+    @PostMapping("/student/addStudent")
     public String studentSave(
-            @RequestParam String login,
-            Student student){
-        student.setLogin(login);
+            @ModelAttribute("student") Student student){
         studentService.saveStudent(student);
         return "redirect:/findStudent";
 
@@ -58,12 +56,12 @@ public class StudentController {
         Student student = studentService.findStudentById(studentid).get();
 
         model.addAttribute("student",student);
-        return "update_student";
+        return "studentEdit";
     }
 
-    @PostMapping("/delete_student")
-    public String deleteStudent(Student student, Model model){
-//        studentService.deleteStudentById(studentid);
+    @GetMapping("/deleteStudent/{studentid}")
+    public String deleteStudent(@PathVariable(value = "studentid")long studentid,Model model){
+        studentService.deleteStudentById(studentid);
         return "redirect:/findStudent";
     }
 

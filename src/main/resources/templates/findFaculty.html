@@ -7,38 +7,46 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default navbar-fixed-top">
+    <a class="navbar-brand" href="/" th:text="#{nav}">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/" th:text="#{home}"><span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/findFaculty">Faculties <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/findFaculty" th:text="#{faculties}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/student">StudentList</a>
+                <a class="nav-link" href="/findStudent" th:text="#{students}"></a>
             </li>
         </ul>
     </div>
     <form th:action="@{/login}">
-        <button type="submit">Sign in</button>
+        <button type="submit" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}">
-        <button type="submit">Sign up</button>
+        <button type="submit" th:text="#{sign_up}"></button>
     </form>
+    <a class="nav-link" th:href="@{?localeData=en}">
+        <img th:src="@{/static/united-kingdom.png}"/>English
+    </a>
+    <a class="nav-link" th:href="@{?localeData=ua}">
+        <img th:src="@{/static/ukraine.png}"/>Ukraine
+    </a>
 </nav>
 
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">#</th>
+        <th scope="col">
+            <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=facultyid&sortDir=' + ${reverseSortDir}}">
+                #</a>
+        </th>
         <th scope="col">
             <a th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
                 Title</a>
@@ -62,7 +70,7 @@
                 <label>
                     <input type="text" name="filter"/>
                 </label>
-                <button type="submit" class="btn btn-success">Find faculty</button>
+                <button type="submit" class="btn btn-success" th:text="#{find_faculty}"></button>
             </form>
 
         </th>
@@ -75,37 +83,43 @@
         <td><span th:text="${faculty.totalPlaces}"></span></td>
         <td><span th:text="${faculty.budgetPlaces}"></span></td>
         <td><span th:text="${faculty.contractPlaces}"></span></td>
-        <td>
-            <a class="btn btn-info" href="/student/${student.id}}" role="button">Update</a>
-        <a class="btn btn-danger" href="/student/${student.id}}" role="button">Delete</a>
+        <td sec:authorize="hasRole('ADMIN')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
+            <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
         </td>
+    </tr>
+    <td sec:authorize="hasRole('USER')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
+        <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
+    </td>
     </tr>
     </tbody>
 </table>
+<div th:if="${#lists.isEmpty(faculties)}" style="font-size: large;color: red;">
+    <span th:text="#{no_faculties}"></span>
+</div>
 <div th:if = "${totalPages > 1}">
     <div class="row col-sm-10">
         <div class="col-sm-2">
-            Total Rows: [[${totalItems}]]
+            [[#{total_rows}]]: [[${totalItems}]]
         </div>
         <div class="col-sm-1">
-            <a th:if="${currentPage > 1}" th:href="@{'/faculty/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
-            <span th:unless="${currentPage > 1}">Previous</span>
+            <a th:if="${currentPage > 1}" class="page-item" th:href="@{'/faculty/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="#{nextPage}"></a>
+            <span th:unless="${currentPage > 1}" th:text="#{previousPage}"></span>
         </div>
         <div class="col-sm-1">
                     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-						<a th:if="${currentPage != i}" th:href="@{'/faculty/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<a th:if="${currentPage != i}" class="page-item active" th:href="@{'/faculty/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
 						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
 					</span>
         </div>
         <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/faculty/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>
+            <a th:if="${currentPage < totalPages}" class="page-item" th:href="@{'/faculty/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="#{nextPage}"></a>
+            <span th:unless="${currentPage < totalPages}"></span>
         </div>
 
     </div>
 </div>
 <form th:action="@{/faculty/addFaculty}" method="get">
-    <button type="submit" class="btn btn-primary">Add faculty</button>
+    <button type="submit" class="btn btn-primary" th:text="#{add_faculty}"></button>
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

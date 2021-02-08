@@ -2,31 +2,42 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Title</title>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div class="container">
+    <h1 th:text="#{edit_system_student}">Student Management System</h1>
+    <hr>
+    <h2 th:text="#{edit_student}">Update Student</h2>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/findStudent">StudentList</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<form th:action="@{/student}" method="post">
-    <input th:type="text" th:name="login" th:value="${student.login}">
-    <input th:type="text" th:name="email" th:value="${student.email}">
-    <input th:type="text" th:name="password" th:value="${student.password}">
-    <button type="submit">Save</button>
-</form>
+    <form action="#" th:action="@{/student/addStudent}" th:object="${student}"
+          method="POST">
+
+        <!-- Add hidden form field to handle update -->
+        <input type="hidden" th:field="*{studentid}" />
+
+        <input type="text" th:field="*{email}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{login}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{password}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{city}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{district}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{school}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{rolesSet}" class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2" th:text="#{edit_student}"> Update Student</button>
+    </form>
+
+    <hr>
+
+    <a th:href = "@{/findStudent}" th:text="#{back_to_list}"> Back to Find List</a>
+</div>
 </body>
 </html>

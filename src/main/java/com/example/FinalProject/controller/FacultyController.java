@@ -32,9 +32,18 @@ public class FacultyController {
         return findFacultyPaginated(1,"title","asc",model);
     }
 
+    @PostMapping("/faculty/saveFaculty")
+    public String saveFaculty(
+            @ModelAttribute("faculty") Faculty faculty){
+        facultyService.saveFaculty(faculty);
+        log.info("edit faculty successful");
+        return "redirect:/findFaculty";
+
+    }
+
     @GetMapping("/faculty/{faculty}")
     public String facultyEdit(@PathVariable Faculty faculty, Model model){
-        model.addAttribute("faculties",faculty);
+        model.addAttribute("faculty",faculty);
         return "facultyEdit";
     }
 
@@ -66,6 +75,21 @@ public class FacultyController {
         facultyService.saveFaculty(faculty2);
         return "redirect:/findFaculty";
     }
+    @GetMapping("/showFormForUpdateFaculty/{facultyid}")
+    public String updateFaculty(@PathVariable(value = "facultyid")long facultyid,Model model){
+        Faculty faculty = facultyService.findByFacultyById(facultyid).get();
+
+        model.addAttribute("faculty",faculty);
+        return "facultyEdit";
+    }
+
+    @GetMapping("/deleteFaculty/{facultyid}")
+    public String deleteFaculty(@PathVariable(value = "facultyid")long facultyid){
+        facultyService.deleteFacultyById(facultyid);
+        log.info("deleted faculty successful");
+        return "redirect:/findFaculty";
+    }
+
     @GetMapping("faculty/page/{pageNo}")
     public String findFacultyPaginated(
             @PathVariable (value = "pageNo") int pageNo,

@@ -29,13 +29,18 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
+    public Optional<Faculty> findByFacultyById(long id) {
+        return facultyRepository.findFacultyByFacultyid(id);
+    }
+
+    @Override
     public void saveFaculty(Faculty faculty) {
         facultyRepository.save(faculty);
     }
 
     @Override
     public void deleteFacultyById(long id) {
-
+        facultyRepository.deleteById(id);
     }
 
     @Override

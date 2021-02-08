@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default navbar-fixed-top">
-    <a class="navbar-brand" href="/">Navbar</a>
+    <a class="navbar-brand" href="/" th:text="#{nav}">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,26 +16,32 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/" th:text="#{home}"><span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" href="/findFaculty" th:text="#{faculties}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/findFaculty">Faculties <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/findStudent">StudentList</a>
+                <a class="nav-link" href="/findStudent" th:text="#{students}"></a>
             </li>
         </ul>
     </div>
     <form th:action="@{/login}">
-        <button type="submit">Sign in</button>
+        <button type="submit" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}">
-        <button type="submit">Sign up</button>
+        <button type="submit" th:text="#{sign_up}"></button>
     </form>
+    <a class="nav-link" th:href="@{?localeData=en}">
+        <img th:src="@{/static/united-kingdom.png}"/>English
+    </a>
+    <a class="nav-link" th:href="@{?localeData=ua}">
+        <img th:src="@{/static/ukraine.png}"/>Ukraine
+    </a>
 </nav>
 <div>
 <div class="div1">
-    <p>This site has created few moments ago This           aadasds  site has created few moments ago</p>
+    <img src="/static/naukma_photo.jpg" alt="bg" class="back-image">
 </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

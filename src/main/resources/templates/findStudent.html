@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Navbar</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default navbar-fixed-top">
+    <a class="navbar-brand" href="/" th:text="#{nav}">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,25 +15,29 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/" th:text="#{home}"><span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/findFaculty">Faculties <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/findFaculty" th:text="#{faculties}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/student">StudentList</a>
+                <a class="nav-link" href="/findStudent" th:text="#{students}"></a>
             </li>
         </ul>
     </div>
     <form th:action="@{/login}">
-        <button type="submit">Sign in</button>
+        <button type="submit" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}">
-        <button type="submit">Sign up</button>
+        <button type="submit" th:text="#{sign_up}"></button>
     </form>
+    <a class="nav-link" th:href="@{?localeData=en}">
+        <img th:src="@{/static/united-kingdom.png}"/>English
+    </a>
+    <a class="nav-link" th:href="@{?localeData=ua}">
+        <img th:src="@{/static/ukraine.png}"/>Ukraine
+    </a>
 </nav>
-
-
 
 <table class="table table-hover">
     <thead>
@@ -70,7 +74,7 @@
                 <label>
                     <input type="text" name="filter"/>
                 </label>
-                <button type="submit" class="btn btn-success">Find students</button>
+                <button type="submit" class="btn btn-success" th:text="#{find_student}"></button>
             </form>
         </th>
     </tr>
@@ -85,31 +89,35 @@
         <td><span th:text="${student.district}"></span></td>
         <td><span th:text="${student.school}"></span></td>
         <td><span th:text="${student.rolesSet}"></span></td>
-        <td><a class="btn btn-info" th:href="@{/showFormForUpdate/{studentid}(studentid=${student.studentid})}">Update</a>
+        <td><a class="btn btn-info" th:href="@{/showFormForUpdate/{studentid}(studentid=${student.studentid})}" th:text="#{update}"></a>
+            <a class="btn btn-danger" th:href="@{/deleteStudent/{studentid}(studentid=${student.studentid})}" th:text="#{delete}"></a>
         </td>
     </tr>
 
     </tbody>
 
 </table>
+<div th:if="${#lists.isEmpty(students)}" style="font-size: large;color: red;">
+    <span th:text="#{no_students}"></span>
+</div>
 <div th:if = "${totalPages > 1}">
     <div class="row col-sm-10">
         <div class="col-sm-2">
-            Total Rows: [[${totalItems}]]
+            [[#{total_rows}]]: [[${totalItems}]]
         </div>
         <div class="col-sm-1">
             <a th:if="${currentPage > 1}" th:href="@{'/student/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-            <span th:unless="${currentPage > 1}">Last</span>
+            <span th:unless="${currentPage > 1}" th:text="#{previousPage}"></span>
         </div>
         <div class="col-sm-1">
                     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                        <a th:if="${currentPage != i}" th:href="@{'/student/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                        <a th:if="${currentPage != i}"  th:href="@{'/student/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
 						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
 					</span>
         </div>
         <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}" th:href="@{'/student/page/' + ${currentPage+1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-            <span th:unless="${currentPage < totalPages}">Next</span>
+            <a th:if="${currentPage < totalPages}" th:href="@{'/student/page/' + ${currentPage+1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="#{nextPage}"></a>
+            <span th:unless="${currentPage < totalPages}"></span>
         </div>
 
     </div>

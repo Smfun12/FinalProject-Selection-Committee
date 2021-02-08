@@ -22,25 +22,4 @@ public class FinalProjectApplication implements WebMvcConfigurer {
 		System.out.println(messageSource.getMessage("hello", null, Locale.ENGLISH));
 		SpringApplication.run(FinalProjectApplication.class, args);
 	}
-
-	@Bean // <--- 1
-	public LocaleResolver localeResolver() {
-		CookieLocaleResolver localeResolver = new CookieLocaleResolver(); // <--- 2
-		Locale defaultLocale = new Locale("ua");
-		localeResolver.setDefaultLocale(defaultLocale); // <--- 3
-
-		return localeResolver;
-	}
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-		// Defaults to "locale" if not set
-		localeChangeInterceptor.setParamName("localeData");
-
-		return localeChangeInterceptor;
-	}
-	@Override
-	public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-		interceptorRegistry.addInterceptor(localeChangeInterceptor());
-	}
 }

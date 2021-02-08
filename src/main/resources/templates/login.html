@@ -15,14 +15,14 @@
     <div id="formContent">
         <!-- Login Form -->
         <form th:action="@{/}" method="post">
-            <input type="text" id="login" class="fadeIn second" th:name="login" placeholder="login">
-            <input type="text" id="password" class="fadeIn third" th:name="password" placeholder="password">
-            <input type="submit" class="fadeIn fourth" value="Log In">
+            <input type="text" id="login" class="fadeIn second" th:name="login" th:placeholder="#{username}">
+            <input type="text" id="password" class="fadeIn third" th:name="password" th:placeholder="#{password}">
+            <input type="submit" class="fadeIn fourth" th:value="#{sign_in}">
         </form>
 
         <!-- Remind Passowrd -->
         <div id="formFooter">
-            <a class="underlineHover" href="/registration">Sign out</a>
+            <a class="underlineHover" href="/registration" th:text="#{sign_out}"></a>
         </div>
 
     </div>

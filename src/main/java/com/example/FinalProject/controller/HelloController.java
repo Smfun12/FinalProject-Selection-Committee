@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HelloController {
@@ -52,7 +53,8 @@ public class HelloController {
             faculties = facultyRepository.findAll();
             model.addAttribute("faculties", faculties);
         } else {
-            model.addAttribute("faculties", facultyRepository.findByTitle(filter).get());
+            Optional<Faculty> faculty = facultyRepository.findByTitle(filter);
+            faculty.ifPresent(value -> model.addAttribute("faculties", value));
         }
         return "findFaculty";
     }
