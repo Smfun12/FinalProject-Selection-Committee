@@ -53,16 +53,23 @@ public class Student {
         this.rolesSet = rolesSet;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "student_roles",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Roles> rolesSet = new HashSet<>();
+    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "student_role", joinColumns = @JoinColumn(name = "student_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Roles> rolesSet;
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "student_roles",
+//            joinColumns = @JoinColumn(name = "student_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id")
+//    )
+//    private Set<Roles> rolesSet = new HashSet<>();
 
     @Column(name = "enabled")
     private boolean enabled = true;
+
+    private boolean accountNonLocked;
 
     public boolean isEnabled() {
         return enabled;

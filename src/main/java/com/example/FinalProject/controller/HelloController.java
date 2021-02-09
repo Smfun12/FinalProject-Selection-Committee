@@ -63,6 +63,7 @@ public class HelloController {
         return "login";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/students")
     public String main(Model model) {
         Iterable<Student> iterable = studentRepository.findAll();

@@ -1,6 +1,6 @@
 package com.example.FinalProject.config;
 
-import com.example.FinalProject.services.StudentDetailsImpl;
+
 import com.example.FinalProject.services.StudentDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,49 +10,41 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-import javax.sql.DataSource;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private DataSource dataSource;
 
     @Bean
-    public UserDetailsService studentDetails(){
-        return new StudentDetailsServiceImpl();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**","/static/**").permitAll()
+                .antMatchers("/", "/static/*")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
                 .permitAll()
                 .and()
-                .logout()
-                .permitAll();
+                .logout().permitAll();
+
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select email, password, login from students where email=?")
-                .authoritiesByUsernameQuery("select s.email, sr.roles from students s " +
-                        "inner join students_role sr on s.id = sr.studentid where s.email=?");
-    }
+    @Autowired
+    StudentDetailsServiceImpl studentDetailsService;
 
+    @Autowired
+    public void configGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(studentDetailsService);
+        auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER");
+        auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
+    }
 }

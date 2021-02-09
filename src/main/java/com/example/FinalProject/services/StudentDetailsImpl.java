@@ -24,7 +24,7 @@ public class StudentDetailsImpl implements UserDetails {
         Set<Roles> roles = student.getRolesSet();
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
         for (Roles roles1 : roles){
-            authorityList.add(new SimpleGrantedAuthority(roles1.getName()));
+            authorityList.add(new SimpleGrantedAuthority(Roles.USER.name()));
         }
         return authorityList;
     }

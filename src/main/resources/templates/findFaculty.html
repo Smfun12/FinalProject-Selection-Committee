@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -22,14 +23,23 @@
                 <a class="nav-link" href="/findFaculty" th:text="#{faculties}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/findStudent" th:text="#{students}"></a>
+                <a class="nav-link" href="/findStudent" th:text="#{students}"
+                   sec:authorize="hasRole('ADMIN')"></a>
             </li>
         </ul>
     </div>
-    <form th:action="@{/login}">
+    <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
+        <span style="color: red;font-size: 20px;">Hello,</span>
+        <span sec:authentication="name" style="color: red;font-size: 20px;"></span>
+
+        <form action="#" th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" />
+        </form>
+    </div>
+    <form th:action="@{/login}"  sec:authorize="isAnonymous()">
         <button type="submit" th:text="#{sign_in}"></button>
     </form>
-    <form th:action="@{/registration}">
+    <form th:action="@{/registration}"  sec:authorize="isAnonymous()">
         <button type="submit" th:text="#{sign_up}"></button>
     </form>
     <a class="nav-link" th:href="@{?localeData=en}">
@@ -86,10 +96,9 @@
         <td sec:authorize="hasRole('ADMIN')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
             <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
         </td>
-    </tr>
-    <td sec:authorize="hasRole('USER')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
-        <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
-    </td>
+        <td sec:authorize="hasRole('USER')">
+            <a class="btn btn-success" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -102,7 +111,7 @@
             [[#{total_rows}]]: [[${totalItems}]]
         </div>
         <div class="col-sm-1">
-            <a th:if="${currentPage > 1}" class="page-item" th:href="@{'/faculty/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="#{nextPage}"></a>
+            <a th:if="${currentPage > 1}" class="page-item" th:href="@{'/faculty/page/' + ${currentPage-1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="#{previousPage}"></a>
             <span th:unless="${currentPage > 1}" th:text="#{previousPage}"></span>
         </div>
         <div class="col-sm-1">
@@ -118,7 +127,7 @@
 
     </div>
 </div>
-<form th:action="@{/faculty/addFaculty}" method="get">
+<form th:action="@{/faculty/addFaculty}" method="get" sec:authorize="hasRole('ADMIN')">
     <button type="submit" class="btn btn-primary" th:text="#{add_faculty}"></button>
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

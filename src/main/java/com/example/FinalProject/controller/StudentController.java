@@ -25,6 +25,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/findStudent")
     public String findStudent(Model model) {
         return findPaginated(1,"studentid","asc",model);

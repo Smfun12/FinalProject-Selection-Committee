@@ -27,11 +27,14 @@ public class FacultyController {
     @Autowired
     private FacultyService facultyService;
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/findFaculty")
     public String facultyList(Model model){
         return findFacultyPaginated(1,"title","asc",model);
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/faculty/saveFaculty")
     public String saveFaculty(
             @ModelAttribute("faculty") Faculty faculty){
@@ -40,18 +43,18 @@ public class FacultyController {
         return "redirect:/findFaculty";
 
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/faculty/{faculty}")
     public String facultyEdit(@PathVariable Faculty faculty, Model model){
         model.addAttribute("faculty",faculty);
         return "facultyEdit";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/faculty/addFaculty")
     public String addFacultyPage(){
         return "addFaculty";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/faculty/addFaculty")
     public String addFaculty(
             @Valid Faculty faculty, BindingResult result, Model model){
@@ -75,6 +78,7 @@ public class FacultyController {
         facultyService.saveFaculty(faculty2);
         return "redirect:/findFaculty";
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/showFormForUpdateFaculty/{facultyid}")
     public String updateFaculty(@PathVariable(value = "facultyid")long facultyid,Model model){
         Faculty faculty = facultyService.findByFacultyById(facultyid).get();
@@ -82,14 +86,14 @@ public class FacultyController {
         model.addAttribute("faculty",faculty);
         return "facultyEdit";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/deleteFaculty/{facultyid}")
     public String deleteFaculty(@PathVariable(value = "facultyid")long facultyid){
         facultyService.deleteFacultyById(facultyid);
         log.info("deleted faculty successful");
         return "redirect:/findFaculty";
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("faculty/page/{pageNo}")
     public String findFacultyPaginated(
             @PathVariable (value = "pageNo") int pageNo,
