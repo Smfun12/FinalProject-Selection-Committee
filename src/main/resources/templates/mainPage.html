@@ -24,23 +24,23 @@
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/findStudent" th:text="#{students}"
-                   sec:authorize="hasRole('ADMIN')"></a>
+                   sec:authorize="hasAuthority('ADMIN')"></a>
             </li>
         </ul>
     </div>
     <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
-        <span style="color: red;font-size: 20px;">Hello,</span>
+        <span style="color: red;font-size: 20px;" th:text="#{hello}"></span>
         <a th:href="@{/userProfile}" sec:authentication="name" style="color: red;font-size: 20px;"></a>
 
             <form action="#" th:action="@{/logout}" method="post">
-                <input type="submit" value="Logout" />
+                <input type="submit" class="btn btn-info" th:value="#{logout}" />
             </form>
     </div>
     <form th:action="@{/login}"  sec:authorize="isAnonymous()">
-        <button type="submit" th:text="#{sign_in}"></button>
+        <button type="submit" class="btn btn-info" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}"  sec:authorize="isAnonymous()">
-        <button type="submit" th:text="#{sign_up}"></button>
+        <button type="submit" class="btn btn-info" th:text="#{sign_up}"></button>
     </form>
     <a class="nav-link" th:href="@{?localeData=en}">
         <img th:src="@{/static/united-kingdom.png}"/>English

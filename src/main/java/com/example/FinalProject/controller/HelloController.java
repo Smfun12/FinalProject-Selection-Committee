@@ -27,25 +27,26 @@ public class HelloController {
     public String hello() { // <--- 1
         return "mainPage"; // <--- 2
     }
+
     @PostMapping("/")
     public String helloPage() { // <--- 1
         return "mainPage"; // <--- 2
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/filterStudent")
     public String find(@RequestParam String filter, Model model) {
         List<Student> students;
         if (filter != null && filter.isEmpty()) {
             students = studentRepository.findAll();
-
         } else {
             students = studentRepository.findByEmail(filter);
         }
         model.addAttribute("students", students);
         return "findStudent";
     }
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @PostMapping("/filterFaculty")
     public String findFaculty(@RequestParam String filter, Model model) {
         List<Faculty> faculties;
@@ -58,12 +59,13 @@ public class HelloController {
         }
         return "findFaculty";
     }
+
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/students")
     public String main(Model model) {
         Iterable<Student> iterable = studentRepository.findAll();

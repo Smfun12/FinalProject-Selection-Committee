@@ -10,6 +10,7 @@
 <div class="container">
     <h1 th:text="#{edit_system_faculty}">Faculty Management System</h1>
     <hr>
+    <p th:text="${error}" style="color: red; font-size: 24px;"></p>
     <h2 th:text="#{edit_faculty}">Update Faculty</h2>
 
     <form action="#" th:action="@{/faculty/saveFaculty}" th:object="${faculty}"
@@ -26,7 +27,13 @@
 
         <input type="text" th:field="*{contractPlaces}" class="form-control mb-4 col-4">
 
-        <button type="submit" class="btn btn-info col-2" th:text="#{edit_faculty}"> Update Faculty</button>
+        <input type="text" th:field="*{firstSubject}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{secondSubject}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{thirdSubject}" class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2" th:text="#{edit_faculty}"></button>
     </form>
 
     <hr>

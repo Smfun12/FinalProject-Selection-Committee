@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+
 @Slf4j
 public class StudentDetailsImpl implements UserDetails {
 
     private Student student;
 
-    public StudentDetailsImpl(Student student){
+    public StudentDetailsImpl(Student student) {
         this.student = student;
         log.info(student.toString());
     }
@@ -25,8 +26,8 @@ public class StudentDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Roles> roles = student.getRolesSet();
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        for (Roles roles1 : roles){
-            authorityList.add(new SimpleGrantedAuthority(Roles.USER.name()));
+        for (Roles roles1 : roles) {
+            authorityList.add(new SimpleGrantedAuthority(roles1.name()));
         }
         return authorityList;
     }

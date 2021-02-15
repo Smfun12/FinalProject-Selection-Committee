@@ -8,6 +8,7 @@ import com.example.FinalProject.services.StudentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,35 +28,39 @@ public class RegistrationController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String addStudent(@Valid Student student, BindingResult result, Model model){
-        Optional<Student> student1 = studentService.findByLogin(student.getLogin());
-        if (result.hasErrors()){
-            model.addAttribute("error","Check user credentials");
+    public String addStudent(@Valid Student student, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("error", "Check user credentials");
             log.info("some error");
-            return "registration";
-        }
-        if (student1.isPresent()) {
-            model.addAttribute("student", "Student exists");
-            log.info("Student" + student1 + " exists");
             return "registration";
         }
         Student student2 = Student.builder().
                 email(student.getEmail())
                 .login(student.getLogin())
-                .password(student.getPassword())
+                .password(passwordEncoder.encode(student.getPassword()))
                 .city(student.getCity())
                 .district(student.getDistrict())
                 .school(student.getSchool())
                 .rolesSet(Collections.singleton(Roles.USER))
                 .build();
         log.info(student2.toString());
-        studentService.saveStudent(student2);
+        try {
+            studentService.saveStudent(student2);
+        }
+        catch (Exception e){
+            model.addAttribute("error", "Student exists");
+            log.info("Student" + student + " exists");
+            return "registration";
+        }
         return "redirect:/login";
     }
 }

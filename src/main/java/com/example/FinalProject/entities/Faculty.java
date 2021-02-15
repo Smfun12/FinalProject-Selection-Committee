@@ -36,6 +36,35 @@ public class Faculty {
     @Column(name = "totalPlaces")
     private int totalPlaces;
 
+    private String firstSubject;
+
+    private String secondSubject;
+
+    public String getFirstSubject() {
+        return firstSubject;
+    }
+
+    public void setFirstSubject(String firstSubject) {
+        this.firstSubject = firstSubject;
+    }
+
+    public String getSecondSubject() {
+        return secondSubject;
+    }
+
+    public void setSecondSubject(String secondSubject) {
+        this.secondSubject = secondSubject;
+    }
+
+    public String getThirdSubject() {
+        return thirdSubject;
+    }
+
+    public void setThirdSubject(String thirdSubject) {
+        this.thirdSubject = thirdSubject;
+    }
+
+    private String thirdSubject;
 
     public Set<Student> getStudents() {
         return students;
@@ -50,11 +79,15 @@ public class Faculty {
 
     @Builder
     public Faculty(@NotBlank @Length(min = 10) String title, @Positive int totalPlaces,
-                   @Positive int budgetPlaces, @Positive int contractPlaces) {
+                   @Positive int budgetPlaces, @Positive int contractPlaces, @NotBlank String firstSubject,
+                   @NotBlank String secondSubject, @NotBlank String thirdSubject) {
         this.title = title;
         this.totalPlaces = totalPlaces;
         this.budgetPlaces = budgetPlaces;
         this.contractPlaces = contractPlaces;
+        this.firstSubject = firstSubject;
+        this.secondSubject = secondSubject;
+        this.thirdSubject = thirdSubject;
     }
 
     public Faculty() {

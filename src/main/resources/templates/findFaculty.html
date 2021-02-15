@@ -24,23 +24,23 @@
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/findStudent" th:text="#{students}"
-                   sec:authorize="hasRole('ADMIN')"></a>
+                   sec:authorize="hasAuthority('ADMIN')"></a>
             </li>
         </ul>
     </div>
     <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
-        <span style="color: red;font-size: 20px;">Hello,</span>
-        <span sec:authentication="name" style="color: red;font-size: 20px;"></span>
+        <span style="color: red;font-size: 20px;" th:text="#{hello}"></span>
+        <a th:href="@{/userProfile}" sec:authentication="name" style="color: red;font-size: 20px;"></a>
 
         <form action="#" th:action="@{/logout}" method="post">
-            <input type="submit" value="Logout" />
+            <input class="btn btn-info" type="submit" th:value="#{logout}" />
         </form>
     </div>
     <form th:action="@{/login}"  sec:authorize="isAnonymous()">
         <button type="submit" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}"  sec:authorize="isAnonymous()">
-        <button type="submit" th:text="#{sign_up}"></button>
+        <button type="submit" class="btn btn-info" th:text="#{sign_up}"></button>
     </form>
     <a class="nav-link" th:href="@{?localeData=en}">
         <img th:src="@{/static/united-kingdom.png}"/>English
@@ -49,6 +49,8 @@
         <img th:src="@{/static/ukraine.png}"/>Ukraine
     </a>
 </nav>
+<div class="alert alert-primary" role="alert" th:text="${applied}" th:if="${applied}"></div>
+
 <table class="table table-hover">
     <thead>
     <tr>
@@ -92,12 +94,12 @@
         <td><span th:text="${faculty.totalPlaces}"></span></td>
         <td><span th:text="${faculty.budgetPlaces}"></span></td>
         <td><span th:text="${faculty.contractPlaces}"></span></td>
-        <td sec:authorize="hasRole('ADMIN')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
+        <td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
             <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
             <a class="btn btn-outline-success" th:href="@{/studentList/{facultyid}(facultyid=${faculty.facultyid})}" th:text="${faculty.students.size()}"></a>
         </td>
-        <td sec:authorize="hasRole('USER')">
-            <a class="btn btn-success" th:href="@{/applyForFaculty/{facultyid}(facultyid=${faculty.facultyid})}">Apply</a>
+        <td sec:authorize="hasAuthority('USER')">
+            <a class="btn btn-success" th:href="@{/applyForFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{apply}"></a>
         </td>
     </tr>
     </tbody>
@@ -127,7 +129,7 @@
 
     </div>
 </div>
-<form th:action="@{/faculty/addFaculty}" method="get" sec:authorize="hasRole('ADMIN')">
+<form th:action="@{/faculty/addFaculty}" method="get" sec:authorize="hasAuthority('ADMIN')">
     <button type="submit" class="btn btn-primary" th:text="#{add_faculty}"></button>
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

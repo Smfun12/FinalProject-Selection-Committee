@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
 @Table(name = "students")
 public class Student {
@@ -24,7 +25,6 @@ public class Student {
     @Column(name = "login")
     private String login;
     @NotNull
-    @Length(max = 10)
     @Column(name = "password")
     private String password;
 
@@ -83,10 +83,38 @@ public class Student {
     @Column(name = "enabled")
     private boolean enabled = true;
 
-    private boolean accountNonLocked;
+    private int firstGrade;
+
+    private int secondGrade;
+
+    private int thirdGrade;
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public int getFirstGrade() {
+        return firstGrade;
+    }
+
+    public void setFirstGrade(int firstGrade) {
+        this.firstGrade = firstGrade;
+    }
+
+    public int getSecondGrade() {
+        return secondGrade;
+    }
+
+    public void setSecondGrade(int secondGrade) {
+        this.secondGrade = secondGrade;
+    }
+
+    public int getThirdGrade() {
+        return thirdGrade;
+    }
+
+    public void setThirdGrade(int thirdGrade) {
+        this.thirdGrade = thirdGrade;
     }
 
     public void setEnabled(boolean enabled) {
@@ -96,11 +124,13 @@ public class Student {
     public Student() {
 
     }
+
     public Student(String email) {
         this.email = email;
     }
+
     @Builder
-    public Student(String email,String password,String login,
+    public Student(String email, String password, String login,
                    String city, String district, String school,
                    Set<Roles> rolesSet) {
         this.email = email;
@@ -111,6 +141,7 @@ public class Student {
         this.school = school;
         this.rolesSet = rolesSet;
     }
+
     public String getLogin() {
         return login;
     }
@@ -168,6 +199,7 @@ public class Student {
     public void setSchool(String school) {
         this.school = school;
     }
+
     @Override
     public String toString() {
         return "Student{" +

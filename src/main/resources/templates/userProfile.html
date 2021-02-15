@@ -4,14 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="/static/profile.css">
     <title>Title</title>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default navbar-fixed-top">
+<body><nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default navbar-fixed-top">
     <a class="navbar-brand" href="/" th:text="#{nav}">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,23 +23,23 @@
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/findStudent" th:text="#{students}"
-                   sec:authorize="hasRole('ADMIN')"></a>
+                   sec:authorize="hasAuthority('ADMIN')"></a>
             </li>
         </ul>
     </div>
     <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
-        <span style="color: red;font-size: 20px;">Hello,</span>
-        <span sec:authentication="name" style="color: red;font-size: 20px;"></span>
+        <span style="color: red;font-size: 20px;" th:text="#{hello}"></span>
+        <a th:href="@{/userProfile}" sec:authentication="name" style="color: red;font-size: 20px;"></a>
 
         <form action="#" th:action="@{/logout}" method="post">
-            <input type="submit" value="Logout" />
+            <input type="submit" class="btn btn-info" th:value="#{logout}" />
         </form>
     </div>
     <form th:action="@{/login}"  sec:authorize="isAnonymous()">
         <button type="submit" th:text="#{sign_in}"></button>
     </form>
     <form th:action="@{/registration}"  sec:authorize="isAnonymous()">
-        <button type="submit" th:text="#{sign_up}"></button>
+        <button type="submit" class="btn btn-info" th:text="#{sign_up}"></button>
     </form>
     <a class="nav-link" th:href="@{?localeData=en}">
         <img th:src="@{/static/united-kingdom.png}"/>English
@@ -99,7 +95,7 @@
                                 <h6 class="mb-0">1st Mark</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                190
+                                <p th:text="${firstGrade}">
                             </div>
                         </div>
                         <hr>
@@ -108,7 +104,7 @@
                                 <h6 class="mb-0">2nd Mark</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                191
+                                <p th:text="${secondGrade}">
                             </div>
                         </div>
                         <hr>
@@ -117,7 +113,7 @@
                                 <h6 class="mb-0">3rd Mark</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                192
+                                <p th:text="${thirdGrade}">
                             </div>
                         </div>
                     </div>
