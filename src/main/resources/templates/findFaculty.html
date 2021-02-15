@@ -49,7 +49,6 @@
         <img th:src="@{/static/ukraine.png}"/>Ukraine
     </a>
 </nav>
-
 <table class="table table-hover">
     <thead>
     <tr>
@@ -95,9 +94,10 @@
         <td><span th:text="${faculty.contractPlaces}"></span></td>
         <td sec:authorize="hasRole('ADMIN')"><a class="btn btn-info" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
             <a class="btn btn-danger" th:href="@{/deleteFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{delete}"></a>
+            <a class="btn btn-outline-success" th:href="@{/studentList/{facultyid}(facultyid=${faculty.facultyid})}" th:text="${faculty.students.size()}"></a>
         </td>
         <td sec:authorize="hasRole('USER')">
-            <a class="btn btn-success" th:href="@{/showFormForUpdateFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:text="#{update}"></a>
+            <a class="btn btn-success" th:href="@{/applyForFaculty/{facultyid}(facultyid=${faculty.facultyid})}">Apply</a>
         </td>
     </tr>
     </tbody>

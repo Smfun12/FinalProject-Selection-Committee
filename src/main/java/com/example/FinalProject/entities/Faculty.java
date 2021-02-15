@@ -2,18 +2,20 @@ package com.example.FinalProject.entities;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "faculties")
 public class Faculty {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "facultyid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long facultyid;
 
     @NotBlank
@@ -35,9 +37,16 @@ public class Faculty {
     private int totalPlaces;
 
 
-//    @OneToMany
-//    @CollectionTable(name = "students", joinColumns = @JoinColumn(name = "faculty_id"))
-//    private Set<Student> studentSet;
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
+    @ManyToMany(mappedBy = "faculties", fetch = FetchType.LAZY)
+    private Set<Student> students = new HashSet<>();
 
     @Builder
     public Faculty(@NotBlank @Length(min = 10) String title, @Positive int totalPlaces,

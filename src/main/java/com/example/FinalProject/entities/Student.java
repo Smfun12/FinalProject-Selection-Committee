@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "students")
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentid;
     @NotNull
     @Email(message = "Email cannot be null")
@@ -40,10 +40,24 @@ public class Student {
     @Column(name = "school")
     private String school;
 
-//    @ManyToOne
-//    @CollectionTable(name = "faculties", joinColumns = @JoinColumn(name = "faculty_id"))
-//    @Column(name = "faculty_id")
-//    private Faculty faculty_id;
+    public Set<Faculty> getFaculties() {
+        return faculties;
+    }
+
+    public void setFaculties(Set<Faculty> faculties) {
+        this.faculties = faculties;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "students_faculties",
+            joinColumns = {
+                    @JoinColumn(name = "student_id", referencedColumnName = "studentid",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "faculty_id", referencedColumnName = "facultyid",
+                            nullable = false, updatable = false)})
+    private Set<Faculty> faculties
+            = new HashSet<>();
 
     public Set<Roles> getRolesSet() {
         return rolesSet;

@@ -30,7 +30,7 @@
     </div>
     <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
         <span style="color: red;font-size: 20px;">Hello,</span>
-        <span sec:authentication="name" style="color: red;font-size: 20px;"></span>
+        <a th:href="@{/userProfile}" sec:authentication="name" style="color: red;font-size: 20px;"></a>
 
             <form action="#" th:action="@{/logout}" method="post">
                 <input type="submit" value="Logout" />

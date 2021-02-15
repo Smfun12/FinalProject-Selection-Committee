@@ -79,19 +79,11 @@
         </th>
         <th scope="col">Role</th>
         <th scope="col">Actions</th>
-        <th scope="col">
-            <form th:action="@{/filterStudent}" method="post">
-                <label>
-                    <input type="text" name="filter"/>
-                </label>
-                <button type="submit" class="btn btn-success" th:text="#{find_student}"></button>
-            </form>
-        </th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="student : ${students}">
-        <th scope="row"><a th:href="@{/userProfile/{studentid}(studentid=${student.studentid})}" th:text="${student.studentid}"></a></th>
+        <th scope="row"><span th:text="${student.studentid}"></span></th>
         <td th:if="${student.enabled}"><span th:text="${student.email}"></span></td>
         <td th:if="${not student.enabled}" class="table-danger"><span th:text="#{blocked}"></span></td>
         <td th:if="${student.enabled}"><span th:text="${student.login}"></span></td>
@@ -105,11 +97,14 @@
         <td th:if="${student.enabled}" ><span th:text="${student.school}"></span></td>
         <td th:if="${not student.enabled}" class="table-danger" ><span th:text="${student.school}"></span></td>
         <td><span th:text="${student.rolesSet}"></span></td>
-        <td><a class="btn btn-info" th:href="@{/showFormForUpdate/{studentid}(studentid=${student.studentid})}" th:text="#{update}"></a>
-            <a class="btn btn-danger" th:href="@{/deleteStudent/{studentid}(studentid=${student.studentid})}" th:text="#{delete}"></a>
-            <a th:if="${student.enabled}" class="btn btn-warning" th:href="@{/disableStudent/{studentid}(studentid=${student.studentid})}" th:text="#{disable}"></a>
-            <a th:if="${not student.enabled}" class="btn btn-warning" th:href="@{/enableStudent/{studentid}(studentid=${student.studentid})}" th:text="#{enable}"></a>
-
+        <td>
+            <!--<a class="btn btn-info" th:href="@{/submitFaculty/{studentid}(studentid=${student.studentid})}" th:text="#{accept}"></a>-->
+            <form th:action="@{/submitFaculty/{studentid}(studentid=${student.studentid})}" method="post">
+                <label>
+                    <input type="hidden" name="filter" th:value="${facultyid}"/>
+                </label>
+                <button type="submit" class="btn btn-info" th:text="#{accept}"></button>
+            </form>
         </td>
 
     </tr>

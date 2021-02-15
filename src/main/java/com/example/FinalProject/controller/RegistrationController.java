@@ -7,11 +7,13 @@ import com.example.FinalProject.services.StudentService;
 import com.example.FinalProject.services.StudentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import sun.security.util.Password;
 
 import javax.validation.Valid;
 import java.util.Collections;

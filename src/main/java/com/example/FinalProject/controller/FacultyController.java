@@ -61,11 +61,11 @@ public class FacultyController {
         Optional<Faculty> facultyList= facultyService.findByTitle(faculty.getTitle());
         if (result.hasErrors()){
             model.addAttribute("error","Check faculty credentials");
-            log.info("some error");
+            log.info(result.getFieldError().toString());
             return "addFaculty";
         }
         if (facultyList.isPresent()){
-            model.addAttribute("faculty", "Faculty exists");
+            model.addAttribute("error", "Faculty exists");
             log.info("Faculty" + facultyList + " exists");
             return "addFaculty";
         }
@@ -92,6 +92,15 @@ public class FacultyController {
         facultyService.deleteFacultyById(facultyid);
         log.info("deleted faculty successful");
         return "redirect:/findFaculty";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/studentList/{facultyid}")
+    public String studentListPage(@PathVariable(value = "facultyid") long facultyid,Model model){
+        Faculty faculty = facultyService.findByFacultyById(facultyid).get();
+        model.addAttribute("students",faculty.getStudents());
+        model.addAttribute("facultyid",facultyid);
+        return "studentList";
     }
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("faculty/page/{pageNo}")

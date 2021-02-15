@@ -1,6 +1,5 @@
 package com.example.FinalProject.config;
 
-
 import com.example.FinalProject.services.StudentDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,11 +23,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
+   @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/static/*")
+                .antMatchers("/","/registration", "/static/*")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -42,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     StudentDetailsServiceImpl studentDetailsService;
 
     @Autowired
-    public void configGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(studentDetailsService);
-        auth.inMemoryAuthentication().withUser("user").password("{noop}password").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(studentDetailsService).passwordEncoder(passwordEncoder());
+            auth.inMemoryAuthentication().withUser("userTest").password("{noop}user").roles("USER");
+            auth.inMemoryAuthentication().withUser("admin").password("{noop}admin").roles("ADMIN");
     }
 }

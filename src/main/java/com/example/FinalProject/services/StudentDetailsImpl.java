@@ -2,6 +2,7 @@ package com.example.FinalProject.services;
 
 import com.example.FinalProject.entities.Roles;
 import com.example.FinalProject.entities.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,13 +11,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
+@Slf4j
 public class StudentDetailsImpl implements UserDetails {
 
     private Student student;
 
     public StudentDetailsImpl(Student student){
         this.student = student;
+        log.info(student.toString());
     }
 
     @Override
@@ -41,21 +43,21 @@ public class StudentDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
