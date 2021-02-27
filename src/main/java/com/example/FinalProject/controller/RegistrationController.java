@@ -51,6 +51,7 @@ public class RegistrationController {
                 .district(student.getDistrict())
                 .school(student.getSchool())
                 .rolesSet(Collections.singleton(Roles.USER))
+                .budget(false)
                 .build();
         log.info(student2.toString());
         try {

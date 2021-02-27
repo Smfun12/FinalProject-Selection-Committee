@@ -15,7 +15,7 @@ import java.util.Set;
 @Slf4j
 public class StudentDetailsImpl implements UserDetails {
 
-    private Student student;
+    private final Student student;
 
     public StudentDetailsImpl(Student student) {
         this.student = student;

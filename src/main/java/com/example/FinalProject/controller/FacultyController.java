@@ -5,6 +5,8 @@ import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.repository.FacultyRepository;
 import com.example.FinalProject.repository.StudentRepository;
 import com.example.FinalProject.services.FacultyService;
+import com.example.FinalProject.utilities.FacultyPDFExporter;
+import com.example.FinalProject.utilities.StudentPDFExporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -143,5 +150,22 @@ public class FacultyController {
 
         model.addAttribute("faculties", facultyList);
         return "findFaculty";
+    }
+
+    @GetMapping("/faculties/export/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=faculties_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Faculty> facultyList = facultyService.getFaculties();
+
+        FacultyPDFExporter exporter = new FacultyPDFExporter(facultyList);
+        exporter.export(response);
+
     }
 }

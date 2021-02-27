@@ -4,6 +4,7 @@ import com.example.FinalProject.entities.Faculty;
 import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.services.FacultyService;
 import com.example.FinalProject.services.StudentService;
+import com.example.FinalProject.utilities.StudentPDFExporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -191,5 +197,22 @@ public class StudentController {
 
         model.addAttribute("students", studentList);
         return "findStudent";
+    }
+
+    @GetMapping("/students/export/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=students_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Student> studentList = studentService.getStudents();
+
+        StudentPDFExporter exporter = new StudentPDFExporter(studentList);
+        exporter.export(response);
+
     }
 }

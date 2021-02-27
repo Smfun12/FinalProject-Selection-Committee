@@ -65,7 +65,11 @@
                 </div>
                 <div class="card mt-3">
                     <tr th:each="faculty : ${student.faculties}">
-                        <td><span th:text="${faculty.title}"></span></td>
+                        <td th:if="${student.budget}"><span th:text="${faculty.title}" style="background-color:greenyellow;"></span></td>
+                        <td th:if="${not student.budget}"><span th:text="${faculty.title}" style="background-color:red;"></span></td>
+                    </tr>
+                    <tr sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{/finalize}">Finalize</a>
                     </tr>
                 </div>
             </div>

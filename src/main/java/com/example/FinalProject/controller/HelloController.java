@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HelloController {
@@ -71,5 +70,21 @@ public class HelloController {
         Iterable<Student> iterable = studentRepository.findAll();
         model.addAttribute("name", iterable);
         return "findStudent";
+    }
+
+    @GetMapping("/finalize")
+    public String finalizeResult(){
+        List<Faculty> facultyList = facultyRepository.findAll();
+        for (Faculty faculty : facultyList){
+            int budgetPlaces = faculty.getBudgetPlaces();
+            Set<Student> students = faculty.getStudents();
+            List<Student> studentList = new ArrayList<>(students);
+            Collections.sort(studentList);
+            for (Student student : studentList){
+                student.setBudget(budgetPlaces-- > 0);
+                studentRepository.save(student);
+            }
+        }
+        return "findFaculty";
     }
 }

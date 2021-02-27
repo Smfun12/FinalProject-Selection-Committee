@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student implements Comparable<Student>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentid;
@@ -44,6 +44,16 @@ public class Student {
         return faculties;
     }
 
+    public boolean budget = true;
+
+    public boolean isBudget() {
+        return budget;
+    }
+
+    public void setBudget(boolean budget) {
+        this.budget = budget;
+    }
+
     public void setFaculties(Set<Faculty> faculties) {
         this.faculties = faculties;
     }
@@ -71,14 +81,6 @@ public class Student {
     @CollectionTable(name = "student_role", joinColumns = @JoinColumn(name = "student_id"))
     @Enumerated(EnumType.STRING)
     private Set<Roles> rolesSet;
-
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "student_roles",
-//            joinColumns = @JoinColumn(name = "student_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id")
-//    )
-//    private Set<Roles> rolesSet = new HashSet<>();
 
     @Column(name = "enabled")
     private boolean enabled = true;
@@ -121,6 +123,13 @@ public class Student {
         this.enabled = enabled;
     }
 
+    @Override
+    public int compareTo(Student o) {
+        double avgThisGrade = (this.firstGrade + this.secondGrade + this.thirdGrade) / 3.0;
+        double avgThatGrade = (o.firstGrade + o.secondGrade + o.thirdGrade) / 3.0;
+        return Double.compare(avgThisGrade,avgThatGrade);
+    }
+
     public Student() {
 
     }
@@ -132,7 +141,7 @@ public class Student {
     @Builder
     public Student(String email, String password, String login,
                    String city, String district, String school,
-                   Set<Roles> rolesSet) {
+                   Set<Roles> rolesSet,boolean budget) {
         this.email = email;
         this.password = password;
         this.login = login;
@@ -140,6 +149,7 @@ public class Student {
         this.district = district;
         this.school = school;
         this.rolesSet = rolesSet;
+        this.budget = budget;
     }
 
     public String getLogin() {
@@ -210,7 +220,12 @@ public class Student {
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
                 ", school='" + school + '\'' +
+                ", budget=" + budget +
                 ", rolesSet=" + rolesSet +
+                ", enabled=" + enabled +
+                ", firstGrade=" + firstGrade +
+                ", secondGrade=" + secondGrade +
+                ", thirdGrade=" + thirdGrade +
                 '}';
     }
 

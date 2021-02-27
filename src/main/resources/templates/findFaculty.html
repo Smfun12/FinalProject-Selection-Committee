@@ -76,6 +76,11 @@
         </th>
         <th scope="col">Actions</th>
         <th scope="col">
+        <a th:href="@{/faculties/export/pdf}">
+            PDF
+        </a>
+        </th>
+        <th scope="col">
 
             <form th:action="@{/filterFaculty}" method="post">
                 <label>
@@ -104,6 +109,7 @@
     </tr>
     </tbody>
 </table>
+
 <div th:if="${#lists.isEmpty(faculties)}" style="font-size: large;color: red;">
     <span th:text="#{no_faculties}"></span>
 </div>
