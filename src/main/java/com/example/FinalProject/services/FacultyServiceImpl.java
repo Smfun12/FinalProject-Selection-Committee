@@ -1,7 +1,6 @@
 package com.example.FinalProject.services;
 
 import com.example.FinalProject.entities.Faculty;
-import com.example.FinalProject.entities.Student;
 import com.example.FinalProject.repository.FacultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+/**
+ * Faculty service class
+ * Transfer db operations to repository
+ */
 @Service
 public class FacultyServiceImpl implements FacultyService{
 

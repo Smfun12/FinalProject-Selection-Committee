@@ -1,19 +1,19 @@
 package com.example.FinalProject.utilities;
 
 import com.example.FinalProject.entities.Faculty;
-import com.example.FinalProject.entities.Student;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
-import com.lowagie.text.Image;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Class for exporting faculties to pdf format
+ */
 public class FacultyPDFExporter {
     private final List<Faculty> faculties;
 
@@ -60,9 +60,9 @@ public class FacultyPDFExporter {
         }
     }
 
-    public void export(HttpServletResponse response) throws DocumentException, IOException {
+    public void export() throws DocumentException, IOException {
         Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+        PdfWriter.getInstance(document, new FileOutputStream("facultyTable.pdf"));
 
         document.open();
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);

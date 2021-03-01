@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container">
+    <p th:text="${error}" style="color: red; font-size: 24px;"></p>
 
     <form action="#" th:action="@{/applyForFaculty/{facultyid}(facultyid=${faculty.facultyid})}" th:object="${faculty}"
           method="POST">

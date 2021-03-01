@@ -9,6 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+/**
+ * Class search current user in session in db, and give corresponding authority
+ */
 @Service
 public class StudentDetailsServiceImpl implements UserDetailsService {
 

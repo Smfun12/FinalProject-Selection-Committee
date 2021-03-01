@@ -2,79 +2,44 @@ package com.example.FinalProject.controller;
 
 import com.example.FinalProject.entities.Faculty;
 import com.example.FinalProject.entities.Student;
-import com.example.FinalProject.repository.FacultyRepository;
-import com.example.FinalProject.repository.StudentRepository;
+import com.example.FinalProject.services.FacultyService;
+import com.example.FinalProject.services.StudentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Controller
+@Slf4j
 public class HelloController {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
     @Autowired
-    private FacultyRepository facultyRepository;
+    private FacultyService facultyService;
 
     @GetMapping("/")
     public String hello() { // <--- 1
+        log.info("Show main page");
         return "mainPage"; // <--- 2
     }
 
-    @PostMapping("/")
-    public String helloPage() { // <--- 1
-        return "mainPage"; // <--- 2
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/filterStudent")
-    public String find(@RequestParam String filter, Model model) {
-        List<Student> students;
-        if (filter != null && filter.isEmpty()) {
-            students = studentRepository.findAll();
-        } else {
-            students = studentRepository.findByEmail(filter);
-        }
-        model.addAttribute("students", students);
-        return "findStudent";
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostMapping("/filterFaculty")
-    public String findFaculty(@RequestParam String filter, Model model) {
-        List<Faculty> faculties;
-        if (filter != null && filter.isEmpty()) {
-            faculties = facultyRepository.findAll();
-            model.addAttribute("faculties", faculties);
-        } else {
-            Optional<Faculty> faculty = facultyRepository.findByTitle(filter);
-            faculty.ifPresent(value -> model.addAttribute("faculties", value));
-        }
-        return "findFaculty";
-    }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("/students")
-    public String main(Model model) {
-        Iterable<Student> iterable = studentRepository.findAll();
-        model.addAttribute("name", iterable);
-        return "findStudent";
+        log.info("Show login page");
+        return "mainPage";
     }
 
     @GetMapping("/finalize")
     public String finalizeResult(){
-        List<Faculty> facultyList = facultyRepository.findAll();
+        List<Faculty> facultyList = facultyService.getFaculties();
         for (Faculty faculty : facultyList){
             int budgetPlaces = faculty.getBudgetPlaces();
             Set<Student> students = faculty.getStudents();
@@ -82,9 +47,10 @@ public class HelloController {
             Collections.sort(studentList);
             for (Student student : studentList){
                 student.setBudget(budgetPlaces-- > 0);
-                studentRepository.save(student);
+                studentService.saveStudent(student);
             }
         }
-        return "findFaculty";
+        log.info("Finalizing result");
+        return "redirect:/findFaculty";
     }
 }

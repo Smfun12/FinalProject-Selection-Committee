@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Student class
+ */
 @Entity
 @Table(name = "students")
 public class Student implements Comparable<Student>{
@@ -127,7 +130,7 @@ public class Student implements Comparable<Student>{
     public int compareTo(Student o) {
         double avgThisGrade = (this.firstGrade + this.secondGrade + this.thirdGrade) / 3.0;
         double avgThatGrade = (o.firstGrade + o.secondGrade + o.thirdGrade) / 3.0;
-        return Double.compare(avgThisGrade,avgThatGrade);
+        return -Double.compare(avgThisGrade,avgThatGrade);
     }
 
     public Student() {

@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Student service class
+ * Transfer db operations to repository
+ */
 @Service
 public class StudentServiceImpl implements StudentService {
 

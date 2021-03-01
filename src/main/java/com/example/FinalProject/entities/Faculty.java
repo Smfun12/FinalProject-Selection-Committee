@@ -2,14 +2,17 @@ package com.example.FinalProject.entities;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Faculty class
+ */
 @Entity
 @Table(name = "faculties")
 public class Faculty {
@@ -36,9 +39,23 @@ public class Faculty {
     @Column(name = "totalPlaces")
     private int totalPlaces;
 
+    @NotBlank
+    @NotNull
+    @Column(name = "first_subject")
+    @Length(min = 4)
     private String firstSubject;
 
+    @NotBlank
+    @NotNull
+    @Column(name = "second_subject")
+    @Length(min = 4)
     private String secondSubject;
+
+    @Column(name = "third_subject")
+    @NotBlank
+    @NotNull
+    @Length(min = 4)
+    private String thirdSubject;
 
     public String getFirstSubject() {
         return firstSubject;
@@ -63,8 +80,6 @@ public class Faculty {
     public void setThirdSubject(String thirdSubject) {
         this.thirdSubject = thirdSubject;
     }
-
-    private String thirdSubject;
 
     public Set<Student> getStudents() {
         return students;
@@ -137,11 +152,15 @@ public class Faculty {
     @Override
     public String toString() {
         return "Faculty{" +
-                "faculty_id=" + facultyid +
+                "facultyid=" + facultyid +
                 ", title='" + title + '\'' +
-                ", totalPlaces=" + totalPlaces +
                 ", budgetPlaces=" + budgetPlaces +
                 ", contractPlaces=" + contractPlaces +
+                ", totalPlaces=" + totalPlaces +
+                ", firstSubject='" + firstSubject + '\'' +
+                ", secondSubject='" + secondSubject + '\'' +
+                ", thirdSubject='" + thirdSubject + '\'' +
+                ", students=" + students +
                 '}';
     }
 }

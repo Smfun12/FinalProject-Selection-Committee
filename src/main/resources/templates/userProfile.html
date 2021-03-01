@@ -69,7 +69,7 @@
                         <td th:if="${not student.budget}"><span th:text="${faculty.title}" style="background-color:red;"></span></td>
                     </tr>
                     <tr sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{/finalize}">Finalize</a>
+                        <a th:href="@{/finalize}" th:text="${finalize}"></a>
                     </tr>
                 </div>
             </div>
@@ -78,46 +78,46 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Login</h6>
+                                <h6 class="mb-0" th:text="#{username}"></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <span th:text="${login}"></span>
+                                <span th:text="*{student.login}"></span>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Email</h6>
+                                <h6 class="mb-0" th:text="#{email}"></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <span th:text="${email}"></span>
+                                <span th:text="*{student.email}"></span>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">1st Mark</h6>
+                                <h6 class="mb-0" th:text="#{firstGrade}"></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <p th:text="${firstGrade}">
+                                <p th:text="*{student.firstGrade}">
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">2nd Mark</h6>
+                                <h6 class="mb-0" th:text="#{secondGrade}"></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <p th:text="${secondGrade}">
+                                <p th:text="*{student.secondGrade}">
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">3rd Mark</h6>
+                                <h6 class="mb-0" th:text="#{thirdGrade}"></h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <p th:text="${thirdGrade}">
+                                <p th:text="*{student.thirdGrade}">
                             </div>
                         </div>
                     </div>

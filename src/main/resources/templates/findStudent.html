@@ -41,10 +41,10 @@
     <form th:action="@{/registration}"  sec:authorize="isAnonymous()">
         <button type="submit" class="btn btn-info" th:text="#{sign_up}"></button>
     </form>
-    <a class="nav-link" th:href="@{?localeData=en}">
+    <a class="nav-link" th:href="@{?sortField=studentid&sortDir=asc&localeData=en}">
         <img th:src="@{/static/united-kingdom.png}"/>English
     </a>
-    <a class="nav-link" th:href="@{?localeData=ua}">
+    <a class="nav-link" th:href="@{?sortField=studentid&sortDir=asc&localeData=ua}">
         <img th:src="@{/static/ukraine.png}"/>Ukraine
     </a>
 </nav>
@@ -53,28 +53,40 @@
     <thead>
     <tr>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=studentid&sortDir=' + ${reverseSortDir}}">
+            <a th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=studentid&sortDir=' + ${reverseSortDir}}">
+                #</a>
+            <a th:unless="${not #lists.isEmpty(students)}">
                 #</a>
         </th>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
-                Email</a>
+            <a  th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}" th:text="#{email}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(students)}" th:text="#{email}">
+                </a>
         </th>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=login&sortDir=' + ${reverseSortDir}}">
-                Login</a>
+            <a th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=login&sortDir=' + ${reverseSortDir}}" th:text="#{username}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(students)}" th:text="#{username}">
+                </a>
         </th>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=city&sortDir=' + ${reverseSortDir}}">
-                City</a>
+            <a th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=city&sortDir=' + ${reverseSortDir}}" th:text="#{city}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(students)}" th:text="#{city}">
+                </a>
         </th>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=district&sortDir=' + ${reverseSortDir}}">
-                District</a>
+            <a th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=district&sortDir=' + ${reverseSortDir}}" th:text="#{district}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(students)}" th:text="#{district}">
+                </a>
         </th>
         <th scope="col">
-            <a th:href="@{'/student/page/' + ${currentPage} + '?sortField=school&sortDir=' + ${reverseSortDir}}">
-                School</a>
+            <a th:if="${not #lists.isEmpty(students)}" th:href="@{'/student/page/' + ${currentPage} + '?sortField=school&sortDir=' + ${reverseSortDir}}" th:text="#{school}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(students)}" th:text="#{school}">
+                </a>
         </th>
         <th scope="col">Role</th>
         <th scope="col">Actions</th>
