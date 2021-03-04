@@ -1,6 +1,7 @@
 package com.example.FinalProject.services;
 
 import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.repository.StudentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -18,53 +20,51 @@ import static org.mockito.Mockito.*;
 public class StudentServiceTest {
 
     @MockBean
-    StudentServiceImpl studentService;
+    StudentRepository studentRepository;
 
     @Test
-    public void getStudents() {
+    public void getFaculties() {
 
-        Student student = Student.builder().email("email@mail.com").build();
+        Student student = Student.builder().login("login").build();
         List<Student> list = new ArrayList<>();
         list.add(student);
-        list.add(new Student("emailma.com"));
-        when(studentService.getStudents()).thenReturn(list);
+        list.add(Student.builder().login("user").build());
+        when(studentRepository.findAll()).thenReturn(list);
+
+        StudentServiceImpl studentService = new StudentServiceImpl();
+        studentService.setstudentRepository(studentRepository);
+        List<Student> students = studentService.getStudents();
+        assertEquals(list,students);
+
     }
     @Test
-    public void findByLogin() {
-        Optional<Student> student = Optional.of(Student.builder().email("email@mail.com").build());
-
-        when(studentService.findByLogin(student.get().getLogin())).thenReturn(student);
+    public void findByTitle() {
+        Optional<Student> student = Optional.of(Student.builder().login("username").build());
+        when(studentRepository.findByLogin(student.get().getLogin())).thenReturn(student);
+        StudentServiceImpl studentService = new StudentServiceImpl();
+        studentService.setstudentRepository(studentRepository);
+        Optional<Student> students = studentService.findByLogin("username");
+        assertEquals(student,students);
     }
 
-    @Test
-    public void findByEmail() {
-        List<Student> student = new ArrayList<>();
-        student.add(Student.builder().email("email@mail.com").build());
-        student.add(Student.builder().email("user@mail.com").build());
-
-        when(studentService.findByEmail("email@email.com")).thenReturn(student);
-    }
 
     @Test
     public void findStudentById() {
-        Optional<Student> student = Optional.of(Student.builder().email("email@mail.com").build());
+        Optional<Student> student = Optional.of(Student.builder().login("username").build());
         student.get().setStudentid(1);
 
-        when(studentService.findStudentById(student.get().getStudentid())).thenReturn(student);
-    }
-
-    @Test
-    public void saveStudent() {
-        Student student = Student.builder().email("email@mail.com").build();
-        studentService.saveStudent(student);
-        verify(studentService, times(1)).saveStudent(student);
+        when(studentRepository.findStudentByStudentid(student.get().getStudentid())).thenReturn(student);
+        StudentServiceImpl studentService = new StudentServiceImpl();
+        studentService.setstudentRepository(studentRepository);
+        Optional<Student> students = studentService.findStudentById(1);
+        assertEquals(student,students);
     }
 
     @Test
     public void deleteStudentById() {
-        Student student = Student.builder().email("email@mail.com").build();
-        studentService.deleteStudentById(student.getStudentid());
-        verify(studentService, times(1)).deleteStudentById(student.getStudentid());
+        Student student = Student.builder().login("username").build();
+        studentRepository.deleteById(student.getStudentid());
+        verify(studentRepository, times(1)).deleteById(student.getStudentid());
     }
 
 }

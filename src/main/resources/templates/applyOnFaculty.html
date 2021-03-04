@@ -21,10 +21,10 @@
         <label for="totalPlaces">Total places</label>
         <input type="text" id="totalPlaces" th:field="*{totalPlaces}" class="form-control mb-4 col-4" required>
 
-        <label for="title">Budget Places</label>
+        <label for="title" th:text="#{budgetPlaces}"></label>
         <input type="text" th:field="*{budgetPlaces}" class="form-control mb-4 col-4" required>
 
-        <label for="title">Title</label>
+        <label for="title" th:text="#{contractPlaces}"></label>
         <input type="text" th:field="*{contractPlaces}" class="form-control mb-4 col-4" required>
 
         <label for="title" th:text="*{firstSubject}"></label>

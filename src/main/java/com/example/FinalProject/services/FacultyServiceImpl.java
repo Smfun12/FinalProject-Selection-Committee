@@ -19,8 +19,13 @@ import java.util.Optional;
 @Service
 public class FacultyServiceImpl implements FacultyService{
 
+
     @Autowired
     FacultyRepository facultyRepository;
+
+    public void setFacultyRepository(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     @Override
     public List<Faculty> getFaculties() {

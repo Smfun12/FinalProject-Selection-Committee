@@ -28,15 +28,15 @@ public class Faculty {
 
 
     @Positive
-    @Column(name = "budgetPlaces")
+    @Column(name = "budget_places")
     private int budgetPlaces;
 
     @Positive
-    @Column(name = "contractPlaces")
+    @Column(name = "contract_places")
     private int contractPlaces;
 
     @Positive
-    @Column(name = "totalPlaces")
+    @Column(name = "total_places")
     private int totalPlaces;
 
     @NotBlank

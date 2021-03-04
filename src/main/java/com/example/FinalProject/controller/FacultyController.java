@@ -113,7 +113,8 @@ public class FacultyController {
     public String addFaculty(
             @Valid Faculty faculty, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("error", "Check faculty credentials");
+            model.addAttribute("error", messageSource.getMessage("faculty_error",null,
+                    LocaleContextHolder.getLocale()));
             return "addFaculty";
         }
         if (faculty.getContractPlaces() + faculty.getBudgetPlaces() != faculty.getTotalPlaces()) {

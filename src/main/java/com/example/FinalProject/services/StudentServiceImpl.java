@@ -74,4 +74,8 @@ public class StudentServiceImpl implements StudentService {
         student.get().setEnabled(true);
         studentRepository.save(student.get());
     }
+
+    public void setstudentRepository(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.FinalProject.services;
 
 import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.repository.FacultyRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -18,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class FacultyServiceImplTest {
 
     @MockBean
-    FacultyServiceImpl facultyService;
+    FacultyRepository facultyRepository;
 
     @Test
     public void getFaculties() {
@@ -27,13 +29,22 @@ public class FacultyServiceImplTest {
         List<Faculty> list = new ArrayList<>();
         list.add(faculty);
         list.add(Faculty.builder().title("Physics").build());
-        when(facultyService.getFaculties()).thenReturn(list);
+        when(facultyRepository.findAll()).thenReturn(list);
+
+        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        facultyService.setFacultyRepository(facultyRepository);
+        List<Faculty> faculties = facultyService.getFaculties();
+        assertEquals(list,faculties);
+
     }
     @Test
     public void findByTitle() {
         Optional<Faculty> faculty = Optional.of(Faculty.builder().title("Math").build());
-
-        when(facultyService.findByTitle(faculty.get().getTitle())).thenReturn(faculty);
+        when(facultyRepository.findByTitle(faculty.get().getTitle())).thenReturn(faculty);
+        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        facultyService.setFacultyRepository(facultyRepository);
+        Optional<Faculty> faculties = facultyService.findByTitle("Math");
+        assertEquals(faculty,faculties);
     }
 
 
@@ -42,21 +53,18 @@ public class FacultyServiceImplTest {
         Optional<Faculty> faculty = Optional.of(Faculty.builder().title("Math").build());
         faculty.get().setFacultyid(1);
 
-        when(facultyService.findByFacultyById(faculty.get().getFacultyid())).thenReturn(faculty);
-    }
-
-    @Test
-    public void saveFaculty() {
-        Faculty faculty = Faculty.builder().title("Math").build();
-        facultyService.saveFaculty(faculty);
-        verify(facultyService, times(1)).saveFaculty(faculty);
+        when(facultyRepository.findFacultyByFacultyid(faculty.get().getFacultyid())).thenReturn(faculty);
+        FacultyServiceImpl facultyService = new FacultyServiceImpl();
+        facultyService.setFacultyRepository(facultyRepository);
+        Optional<Faculty> faculties = facultyService.findByFacultyById(1);
+        assertEquals(faculty,faculties);
     }
 
     @Test
     public void deleteFacultyById() {
         Faculty faculty = Faculty.builder().title("Math").build();
-        facultyService.deleteFacultyById(faculty.getFacultyid());
-        verify(facultyService, times(1)).deleteFacultyById(faculty.getFacultyid());
+        facultyRepository.deleteById(faculty.getFacultyid());
+        verify(facultyRepository, times(1)).deleteById(faculty.getFacultyid());
     }
 
 }

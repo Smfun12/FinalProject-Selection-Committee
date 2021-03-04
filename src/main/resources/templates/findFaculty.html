@@ -67,28 +67,28 @@
                 #</a>
         </th>
         <th scope="col">
-            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
-                Title</a>
-            <a th:unless="${not #lists.isEmpty(faculties)}">
-                Title</a>
+            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}" th:text="#{title}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(faculties)}" th:text="#{title}">
+                </a>
         </th>
         <th scope="col">
-            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=totalPlaces&sortDir=' + ${reverseSortDir}}">
-                Total Places</a>
-            <a th:unless="${not #lists.isEmpty(faculties)}">
-                Total Places</a>
+            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=totalPlaces&sortDir=' + ${reverseSortDir}}" th:text="#{totalPlaces}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(faculties)}" th:text="#{totalPlaces}">
+                </a>
         </th>
         <th scope="col">
-            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=budgetPlaces&sortDir=' + ${reverseSortDir}}">
-                Budget Places</a>
-            <a th:unless="${not #lists.isEmpty(faculties)}">
-                Budget Places</a>
+            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=budgetPlaces&sortDir=' + ${reverseSortDir}}" th:text="#{budgetPlaces}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(faculties)}" th:text="#{budgetPlaces}">
+                </a>
         </th>
         <th scope="col">
-            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=contractPlaces&sortDir=' + ${reverseSortDir}}">
-                Contract Places</a>
-            <a th:unless="${not #lists.isEmpty(faculties)}">
-                Contract Places</a>
+            <a th:if="${not #lists.isEmpty(faculties)}" th:href="@{'/faculty/page/' + ${currentPage} + '?sortField=contractPlaces&sortDir=' + ${reverseSortDir}}" th:text="#{contractPlaces}">
+                </a>
+            <a th:unless="${not #lists.isEmpty(faculties)}" th:text="#{contractPlaces}">
+                </a>
         </th>
         <th scope="col">Actions</th>
         <th scope="col">

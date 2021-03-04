@@ -18,18 +18,27 @@
         <!-- Add hidden form field to handle update -->
         <input type="hidden" th:field="*{studentid}" />
 
+        <label th:text="#{email}"></label>
         <input type="text" th:field="*{email}" class="form-control mb-4 col-4">
 
+        <label th:text="#{login}"></label>
         <input type="text" th:field="*{login}" class="form-control mb-4 col-4">
 
+        <input type="hidden" th:field="*{password}">
+
+        <label th:text="#{city}"></label>
         <input type="text" th:field="*{city}" class="form-control mb-4 col-4">
 
+        <label th:text="#{district}"></label>
         <input type="text" th:field="*{district}" class="form-control mb-4 col-4">
 
+        <label th:text="#{school}"></label>
         <input type="text" th:field="*{school}" class="form-control mb-4 col-4">
 
+        <label th:text="#{rolesSet}"></label>
         <input type="text" th:field="*{rolesSet}" class="form-control mb-4 col-4">
 
+        <label th:text="#{enable}"></label>
         <input type="text" th:field="*{enabled}" class="form-control mb-4 col-4">
 
         <button type="submit" class="btn btn-info col-2" th:text="#{edit_student}"> Update Student</button>
