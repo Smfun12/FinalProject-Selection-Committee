@@ -1,7 +1,6 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Student;
-import com.example.FinalProject.repository.StudentRepository;
+import com.example.FinalProject.entities.models.Student;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class StudentServiceTest {
 
     @MockBean
-    StudentRepository studentRepository;
+    StudentService studentService;
 
     @Test
     public void getFaculties() {
@@ -29,10 +28,8 @@ public class StudentServiceTest {
         List<Student> list = new ArrayList<>();
         list.add(student);
         list.add(Student.builder().login("user").build());
-        when(studentRepository.findAll()).thenReturn(list);
+        when(studentService.getStudents()).thenReturn(list);
 
-        StudentServiceImpl studentService = new StudentServiceImpl();
-        studentService.setstudentRepository(studentRepository);
         List<Student> students = studentService.getStudents();
         assertEquals(list,students);
 
@@ -40,9 +37,7 @@ public class StudentServiceTest {
     @Test
     public void findByTitle() {
         Optional<Student> student = Optional.of(Student.builder().login("username").build());
-        when(studentRepository.findByLogin(student.get().getLogin())).thenReturn(student);
-        StudentServiceImpl studentService = new StudentServiceImpl();
-        studentService.setstudentRepository(studentRepository);
+        when(studentService.findByLogin(student.get().getLogin())).thenReturn(student);
         Optional<Student> students = studentService.findByLogin("username");
         assertEquals(student,students);
     }
@@ -53,9 +48,7 @@ public class StudentServiceTest {
         Optional<Student> student = Optional.of(Student.builder().login("username").build());
         student.get().setStudentid(1);
 
-        when(studentRepository.findStudentByStudentid(student.get().getStudentid())).thenReturn(student);
-        StudentServiceImpl studentService = new StudentServiceImpl();
-        studentService.setstudentRepository(studentRepository);
+        when(studentService.findStudentById(student.get().getStudentid())).thenReturn(student);
         Optional<Student> students = studentService.findStudentById(1);
         assertEquals(student,students);
     }
@@ -63,8 +56,8 @@ public class StudentServiceTest {
     @Test
     public void deleteStudentById() {
         Student student = Student.builder().login("username").build();
-        studentRepository.deleteById(student.getStudentid());
-        verify(studentRepository, times(1)).deleteById(student.getStudentid());
+        studentService.deleteStudentById(student.getStudentid());
+        verify(studentService, times(1)).deleteStudentById(student.getStudentid());
     }
 
 }

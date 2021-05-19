@@ -1,6 +1,6 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.entities.models.Faculty;
 import com.example.FinalProject.repository.FacultyRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,8 +31,7 @@ public class FacultyServiceImplTest {
         list.add(Faculty.builder().title("Physics").build());
         when(facultyRepository.findAll()).thenReturn(list);
 
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        facultyService.setFacultyRepository(facultyRepository);
+        FacultyServiceImpl facultyService = new FacultyServiceImpl(facultyRepository);
         List<Faculty> faculties = facultyService.getFaculties();
         assertEquals(list,faculties);
 
@@ -41,8 +40,7 @@ public class FacultyServiceImplTest {
     public void findByTitle() {
         Optional<Faculty> faculty = Optional.of(Faculty.builder().title("Math").build());
         when(facultyRepository.findByTitle(faculty.get().getTitle())).thenReturn(faculty);
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        facultyService.setFacultyRepository(facultyRepository);
+        FacultyServiceImpl facultyService = new FacultyServiceImpl(facultyRepository);
         Optional<Faculty> faculties = facultyService.findByTitle("Math");
         assertEquals(faculty,faculties);
     }
@@ -54,8 +52,7 @@ public class FacultyServiceImplTest {
         faculty.get().setFacultyid(1);
 
         when(facultyRepository.findFacultyByFacultyid(faculty.get().getFacultyid())).thenReturn(faculty);
-        FacultyServiceImpl facultyService = new FacultyServiceImpl();
-        facultyService.setFacultyRepository(facultyRepository);
+        FacultyServiceImpl facultyService = new FacultyServiceImpl(facultyRepository);
         Optional<Faculty> faculties = facultyService.findByFacultyById(1);
         assertEquals(faculty,faculties);
     }

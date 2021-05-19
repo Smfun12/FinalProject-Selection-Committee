@@ -1,7 +1,7 @@
 package com.example.FinalProject.controller;
 
-import com.example.FinalProject.entities.Roles;
-import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.entities.models.Roles;
+import com.example.FinalProject.entities.models.Student;
 import com.example.FinalProject.services.StudentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,17 @@ import java.util.Collections;
 @Slf4j
 public class RegistrationController {
 
-    @Autowired
     private StudentService studentService;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     ResourceBundleMessageSource messageSource;
+
+    @Autowired
+    public RegistrationController(StudentService studentService, PasswordEncoder passwordEncoder) {
+        this.studentService = studentService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public RegistrationController(){
         messageSource = new ResourceBundleMessageSource();

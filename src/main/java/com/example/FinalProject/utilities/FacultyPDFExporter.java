@@ -1,6 +1,6 @@
 package com.example.FinalProject.utilities;
 
-import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.entities.models.Faculty;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;

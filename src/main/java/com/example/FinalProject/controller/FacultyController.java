@@ -1,6 +1,6 @@
 package com.example.FinalProject.controller;
 
-import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.entities.models.Faculty;
 import com.example.FinalProject.services.FacultyService;
 import com.example.FinalProject.utilities.FacultyPDFExporter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,14 @@ import java.util.Optional;
 @Slf4j
 public class FacultyController {
 
-    @Autowired
     private FacultyService facultyService;
 
     ResourceBundleMessageSource messageSource;
+
+    @Autowired
+    public FacultyController(FacultyService facultyService) {
+        this.facultyService = facultyService;
+    }
 
     public FacultyController(){
         messageSource = new ResourceBundleMessageSource();

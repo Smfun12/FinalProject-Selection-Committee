@@ -1,7 +1,7 @@
 package com.example.FinalProject.controller;
 
-import com.example.FinalProject.entities.Faculty;
-import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.entities.models.Faculty;
+import com.example.FinalProject.entities.models.Student;
 import com.example.FinalProject.services.FacultyService;
 import com.example.FinalProject.services.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +19,14 @@ import java.util.Set;
 @Slf4j
 public class HelloController {
 
+    private final StudentService studentService;
+    private final FacultyService facultyService;
+
     @Autowired
-    private StudentService studentService;
-    @Autowired
-    private FacultyService facultyService;
+    public HelloController(StudentService studentService, FacultyService facultyService) {
+        this.studentService = studentService;
+        this.facultyService = facultyService;
+    }
 
     @GetMapping("/")
     public String hello() { // <--- 1

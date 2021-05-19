@@ -1,4 +1,4 @@
-package com.example.FinalProject.entities;
+package com.example.FinalProject.entities.models;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;

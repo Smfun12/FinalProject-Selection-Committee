@@ -1,6 +1,6 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.entities.models.Faculty;
 import com.example.FinalProject.repository.FacultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +19,10 @@ import java.util.Optional;
 @Service
 public class FacultyServiceImpl implements FacultyService{
 
-
-    @Autowired
     FacultyRepository facultyRepository;
 
-    public void setFacultyRepository(FacultyRepository facultyRepository) {
+    @Autowired
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
 

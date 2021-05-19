@@ -1,7 +1,7 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Roles;
-import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.entities.models.Roles;
+import com.example.FinalProject.entities.models.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

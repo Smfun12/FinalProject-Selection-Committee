@@ -1,7 +1,7 @@
 package com.example.FinalProject.controller;
 
-import com.example.FinalProject.entities.Faculty;
-import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.entities.models.Faculty;
+import com.example.FinalProject.entities.models.Student;
 import com.example.FinalProject.services.FacultyService;
 import com.example.FinalProject.services.StudentService;
 import com.example.FinalProject.utilities.StudentPDFExporter;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,15 +32,18 @@ import java.util.Optional;
 
 @Slf4j
 @Controller
-@RequestMapping()
 @PreAuthorize("hasAuthority('ADMIN')")
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
+    private final StudentService studentService;
+
+    private final FacultyService facultyService;
 
     @Autowired
-    private FacultyService facultyService;
+    public StudentController(StudentService studentService, FacultyService facultyService) {
+        this.studentService = studentService;
+        this.facultyService = facultyService;
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findStudent")
@@ -61,7 +65,25 @@ public class StudentController {
         if (filter != null && filter.isEmpty()) {
             students = studentService.getStudents();
         } else {
-            students = studentService.findByEmail(filter);
+            Optional<Student> student = studentService.findByEmail(filter);
+            students = new LinkedList<>();
+            students.add(student.get());
+        }
+        model.addAttribute("students", students);
+        log.info("Find student with filter: " + filter);
+        return "findStudent";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(value = "/filterStudent",headers = "")
+    public String find(@RequestParam String filter, @RequestHeader(value = "jdbc", required = false) String header, Model model) {
+        List<Student> students;
+        if (filter != null && filter.isEmpty()) {
+            students = studentService.getStudents();
+        } else {
+            Optional<Student> student = studentService.findByEmail(filter);
+            students = new LinkedList<>();
+            students.add(student.get());
         }
         model.addAttribute("students", students);
         log.info("Find student with filter: " + filter);

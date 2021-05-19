@@ -1,26 +1,26 @@
-package com.example.FinalProject.services;
+package com.example.FinalProject.repository;
 
-import com.example.FinalProject.entities.Student;
-import com.example.FinalProject.repository.StudentRepository;
+import com.example.FinalProject.entities.models.Student;
+import com.example.FinalProject.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Student service class
- * Transfer db operations to repository
- */
-@Service
-public class StudentServiceImpl implements StudentService {
+@Repository
+public class StudentJpaRepo implements StudentService {
+
+    StudentRepository studentRepository;
 
     @Autowired
-    StudentRepository studentRepository;
+    public StudentJpaRepo(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public List<Student> getStudents() {
@@ -33,7 +33,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findByEmail(String email) {
+    public Optional<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email);
     }
 
@@ -61,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Page<Student> findPaginated(int pageNo, int pageSize,String sortField, String sortDirection) {
+    public Page<Student> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize,sort);
@@ -73,9 +73,5 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> student = studentRepository.findById(studentid);
         student.get().setEnabled(true);
         studentRepository.save(student.get());
-    }
-
-    public void setstudentRepository(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
     }
 }

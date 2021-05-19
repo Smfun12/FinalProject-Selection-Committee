@@ -1,6 +1,6 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Student;
+import com.example.FinalProject.entities.models.Student;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface StudentService {
     List<Student> getStudents();
     Optional<Student> findByLogin(String login);
-    List<Student> findByEmail(String email);
+    Optional<Student> findByEmail(String email);
     Optional<Student> findStudentById(long id);
     void saveStudent(Student student);
     void deleteStudentById(long id);

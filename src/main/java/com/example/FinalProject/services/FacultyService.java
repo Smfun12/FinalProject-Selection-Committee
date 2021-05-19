@@ -1,6 +1,6 @@
 package com.example.FinalProject.services;
 
-import com.example.FinalProject.entities.Faculty;
+import com.example.FinalProject.entities.models.Faculty;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
