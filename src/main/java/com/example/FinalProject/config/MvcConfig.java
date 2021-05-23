@@ -1,7 +1,10 @@
 package com.example.FinalProject.config;
 
+import com.example.FinalProject.api.dto.SaveHeaders;
+import com.example.FinalProject.api.interceptor.CustomInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -37,6 +40,11 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry) {
         interceptorRegistry.addInterceptor(localeChangeInterceptor());
+        interceptorRegistry.addInterceptor(customInterceptor());
+    }
+
+    private HandlerInterceptor customInterceptor() {
+        return new CustomInterceptor();
     }
 
     @Override
