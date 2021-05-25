@@ -1,8 +1,6 @@
 package com.example.FinalProject.domain.service;
 
-import com.example.FinalProject.pestistence.entity.Student;
-import com.example.FinalProject.pestistence.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.FinalProject.domain.model.StudentModel;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,16 +14,16 @@ import java.util.Optional;
 @Service
 public class StudentDetailsServiceImpl implements UserDetailsService {
 
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public StudentDetailsServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public StudentDetailsServiceImpl(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        Optional<Student> student = studentRepository.findByLogin(username);
+        Optional<StudentModel> student = studentService.findByLogin(username);
 
         if (!student.isPresent()) {
             throw new UsernameNotFoundException("Could not find user");

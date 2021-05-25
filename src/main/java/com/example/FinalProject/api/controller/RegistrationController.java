@@ -1,8 +1,8 @@
 package com.example.FinalProject.api.controller;
 
+import com.example.FinalProject.domain.model.RolesModel;
+import com.example.FinalProject.domain.model.StudentModel;
 import com.example.FinalProject.domain.service.StudentService;
-import com.example.FinalProject.pestistence.entity.Roles;
-import com.example.FinalProject.pestistence.entity.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,19 +41,19 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public Student addStudent(@Valid Student student, BindingResult result) {
+    public StudentModel addStudent(@Valid StudentModel student, BindingResult result) {
         if (result.hasErrors()) {
             log.info(result.getAllErrors().toString());
             return null;
         }
-        Student student2 = Student.builder().
+        StudentModel student2 = StudentModel.builder().
                 email(student.getEmail())
                 .login(student.getLogin())
                 .password(passwordEncoder.encode(student.getPassword()))
                 .city(student.getCity())
                 .district(student.getDistrict())
                 .school(student.getSchool())
-                .rolesSet(Collections.singleton(Roles.USER))
+                .rolesSet(Collections.singleton(RolesModel.USER))
                 .budget(false)
                 .build();
         log.info(student2.toString());

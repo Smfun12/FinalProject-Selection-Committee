@@ -1,6 +1,6 @@
-package com.example.FinalProject.pestistence.repository;
+package com.example.FinalProject.pestistence.repository.studentRepo;
 
-import com.example.FinalProject.api.mapper.StudentRowMapper;
+import com.example.FinalProject.pestistence.mapper.StudentRowMapper;
 import com.example.FinalProject.pestistence.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class StudentJDBCRepo {
+public class StudentJDBCRepo{
 
     private final JdbcTemplate jdbcTemplate;
 

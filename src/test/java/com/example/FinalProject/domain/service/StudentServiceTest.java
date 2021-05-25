@@ -1,5 +1,6 @@
 package com.example.FinalProject.domain.service;
 
+import com.example.FinalProject.domain.model.StudentModel;
 import com.example.FinalProject.pestistence.entity.Student;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,32 +25,32 @@ public class StudentServiceTest {
     @Test
     public void getFaculties() {
 
-        Student student = Student.builder().login("login").build();
-        List<Student> list = new ArrayList<>();
+        StudentModel student = StudentModel.builder().login("login").build();
+        List<StudentModel> list = new ArrayList<>();
         list.add(student);
-        list.add(Student.builder().login("user").build());
+        list.add(StudentModel.builder().login("user").build());
         when(studentService.getStudents()).thenReturn(list);
 
-        List<Student> students = studentService.getStudents();
+        List<StudentModel> students = studentService.getStudents();
         assertEquals(list,students);
 
     }
     @Test
     public void findByTitle() {
-        Optional<Student> student = Optional.of(Student.builder().login("username").build());
+        Optional<StudentModel> student = Optional.of(StudentModel.builder().login("username").build());
         when(studentService.findByLogin(student.get().getLogin())).thenReturn(student);
-        Optional<Student> students = studentService.findByLogin("username");
+        Optional<StudentModel> students = studentService.findByLogin("username");
         assertEquals(student,students);
     }
 
 
     @Test
     public void findStudentById() {
-        Optional<Student> student = Optional.of(Student.builder().login("username").build());
+        Optional<StudentModel> student = Optional.of(StudentModel.builder().login("username").build());
         student.get().setStudentid(1);
 
         when(studentService.findStudentById(student.get().getStudentid())).thenReturn(student);
-        Optional<Student> students = studentService.findStudentById(1);
+        Optional<StudentModel> students = studentService.findStudentById(1);
         assertEquals(student,students);
     }
 

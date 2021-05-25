@@ -1,4 +1,4 @@
-package com.example.FinalProject.pestistence.repository;
+package com.example.FinalProject.pestistence.repository.studentRepo;
 
 import com.example.FinalProject.pestistence.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,9 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-        Optional<Student> findByEmail(String email);
 
-        Optional<Student> findByLogin(String login);
+    Optional<Student> findByEmail(String email);
 
-        Optional<Student> findStudentByStudentid(long id);
+    Optional<Student> findByLogin(String login);
+
+    Optional<Student> findStudentByStudentid(long id);
 }

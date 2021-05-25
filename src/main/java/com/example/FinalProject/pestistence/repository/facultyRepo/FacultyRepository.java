@@ -1,4 +1,4 @@
-package com.example.FinalProject.pestistence.repository;
+package com.example.FinalProject.pestistence.repository.facultyRepo;
 
 import com.example.FinalProject.pestistence.entity.Faculty;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,16 +1,16 @@
 package com.example.FinalProject.domain.service;
 
-import com.example.FinalProject.pestistence.entity.Faculty;
+import com.example.FinalProject.domain.model.FacultyModel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface FacultyService {
-    List<Faculty> getFaculties();
-    Optional<Faculty> findByTitle(String title);
-    Optional<Faculty> findByFacultyById(long id);
-    void saveFaculty(Faculty faculty);
+    List<FacultyModel> getFaculties();
+    Optional<FacultyModel> findByTitle(String title);
+    Optional<FacultyModel> findByFacultyById(long id);
+    void saveFaculty(FacultyModel faculty);
     void deleteFacultyById(long id);
-    Page<Faculty> findFacultyPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
+    Page<FacultyModel> findFacultyPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 }

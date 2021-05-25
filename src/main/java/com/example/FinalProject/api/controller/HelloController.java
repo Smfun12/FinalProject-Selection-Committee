@@ -1,9 +1,9 @@
 package com.example.FinalProject.api.controller;
 
+import com.example.FinalProject.domain.model.FacultyModel;
+import com.example.FinalProject.domain.model.StudentModel;
 import com.example.FinalProject.domain.service.FacultyService;
 import com.example.FinalProject.domain.service.StudentService;
-import com.example.FinalProject.pestistence.entity.Faculty;
-import com.example.FinalProject.pestistence.entity.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,14 +37,15 @@ public class HelloController {
     }
 
     @GetMapping("/finalize")
-    public List<Faculty> finalizeResult(){
-        List<Faculty> facultyList = facultyService.getFaculties();
-        for (Faculty faculty : facultyList){
+    public List<FacultyModel> finalizeResult(){
+        List<FacultyModel> facultyList = facultyService.getFaculties();
+        for (FacultyModel faculty : facultyList){
             int budgetPlaces = faculty.getBudgetPlaces();
-            Set<Student> students = faculty.getStudents();
-            List<Student> studentList = new ArrayList<>(students);
+            Set<Long> students = faculty.getStudents();
+            List<Long> studentList = new ArrayList<>(students);
             Collections.sort(studentList);
-            for (Student student : studentList){
+            for (Long id : studentList){
+                StudentModel student = studentService.findStudentById(id).get();
                 student.setBudget(budgetPlaces-- > 0);
                 studentService.saveStudent(student);
             }

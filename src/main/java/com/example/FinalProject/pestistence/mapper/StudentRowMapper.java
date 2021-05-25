@@ -1,4 +1,4 @@
-package com.example.FinalProject.api.mapper;
+package com.example.FinalProject.pestistence.mapper;
 
 import com.example.FinalProject.pestistence.entity.Student;
 import org.springframework.jdbc.core.RowMapper;

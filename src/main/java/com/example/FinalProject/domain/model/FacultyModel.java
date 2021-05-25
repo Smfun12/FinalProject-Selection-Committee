@@ -1,5 +1,6 @@
 package com.example.FinalProject.domain.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 public class FacultyModel {
 
     private long facultyid;

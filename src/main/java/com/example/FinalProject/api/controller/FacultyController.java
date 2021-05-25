@@ -1,8 +1,7 @@
 package com.example.FinalProject.api.controller;
 
+import com.example.FinalProject.domain.model.FacultyModel;
 import com.example.FinalProject.domain.service.FacultyService;
-import com.example.FinalProject.pestistence.entity.Faculty;
-import com.example.FinalProject.pestistence.entity.Student;
 import com.example.FinalProject.utilities.FacultyPDFExporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -41,7 +40,7 @@ public class FacultyController {
 
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/faculties")
-    public List<Faculty> facultyList() {
+    public List<FacultyModel> facultyList() {
         return findFacultyPaginated(1, "title", "asc");
     }
     /**
@@ -51,13 +50,13 @@ public class FacultyController {
      */
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @PostMapping("/filterFaculty")
-    public List<Faculty> findFaculty(@RequestParam String filter) {
-        List<Faculty> faculties;
+    public List<FacultyModel> findFaculty(@RequestParam String filter) {
+        List<FacultyModel> faculties;
         if (filter != null && filter.isEmpty()) {
             faculties = facultyService.getFaculties();
             log.info("Find faculty with filter: " + filter);
         } else {
-            Optional<Faculty> faculty = facultyService.findByTitle(filter);
+            Optional<FacultyModel> faculty = facultyService.findByTitle(filter);
             faculties = new LinkedList<>();
             faculty.ifPresent(faculties::add);
         }
@@ -66,7 +65,7 @@ public class FacultyController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/faculty/{faculty}")
-    public Faculty facultyEdit(@PathVariable Faculty faculty) {
+    public FacultyModel facultyEdit(@PathVariable FacultyModel faculty) {
         log.info("Show edit page for current faculty");
         return faculty;
     }
@@ -80,8 +79,8 @@ public class FacultyController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/faculty/new")
-    public Faculty addFaculty(
-            @Valid Faculty faculty, BindingResult result) {
+    public FacultyModel addFaculty(
+            @Valid FacultyModel faculty, BindingResult result) {
         if (result.hasErrors()) {
             return null;
         }
@@ -90,7 +89,7 @@ public class FacultyController {
             return null;
         }
 
-        Faculty faculty2 = Faculty.builder()
+        FacultyModel faculty2 = FacultyModel.builder()
                 .title(faculty.getTitle())
                 .totalPlaces(faculty.getTotalPlaces())
                 .budgetPlaces(faculty.getBudgetPlaces())
@@ -111,8 +110,8 @@ public class FacultyController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/showFormForUpdateFaculty/{facultyid}")
-    public Faculty updateFaculty(@PathVariable(value = "facultyid") long facultyid) {
-        Optional<Faculty> faculty = facultyService.findByFacultyById(facultyid);
+    public FacultyModel updateFaculty(@PathVariable(value = "facultyid") long facultyid) {
+        Optional<FacultyModel> faculty = facultyService.findByFacultyById(facultyid);
         if (!faculty.isPresent()){
             return null;
         }
@@ -122,7 +121,7 @@ public class FacultyController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/deleteFaculty/{facultyid}")
-    public List<Faculty> deleteFaculty(@PathVariable(value = "facultyid") long facultyid) {
+    public List<FacultyModel> deleteFaculty(@PathVariable(value = "facultyid") long facultyid) {
         facultyService.deleteFacultyById(facultyid);
         log.info("Deleted faculty successfully");
         return facultyService.getFaculties();
@@ -135,8 +134,8 @@ public class FacultyController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/studentList/{facultyid}")
-    public Set<Student> studentListPage(@PathVariable(value = "facultyid") long facultyid) {
-        Optional<Faculty> faculty = facultyService.findByFacultyById(facultyid);
+    public Set<Long> studentListPage(@PathVariable(value = "facultyid") long facultyid) {
+        Optional<FacultyModel> faculty = facultyService.findByFacultyById(facultyid);
         if (!faculty.isPresent()){
             return null;
         }
@@ -146,14 +145,14 @@ public class FacultyController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("faculty/page/{pageNo}")
-    public List<Faculty> findFacultyPaginated(
+    public List<FacultyModel> findFacultyPaginated(
             @PathVariable(value = "pageNo") int pageNo,
             @RequestParam("sortField") String sortField,
             @RequestParam("sortDir") String sortDir) {
         int pageSize = 5;
 
-        Page<Faculty> page = facultyService.findFacultyPaginated(pageNo, pageSize, sortField, sortDir);
-        List<Faculty> facultyList = page.getContent();
+        Page<FacultyModel> page = facultyService.findFacultyPaginated(pageNo, pageSize, sortField, sortDir);
+        List<FacultyModel> facultyList = page.getContent();
 
         log.info("Show faculty list page");
         return facultyList;
@@ -169,7 +168,7 @@ public class FacultyController {
         String headerValue = "attachment; filename=faculties_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        List<Faculty> facultyList = facultyService.getFaculties();
+        List<FacultyModel> facultyList = facultyService.getFaculties();
 
         FacultyPDFExporter exporter = new FacultyPDFExporter(facultyList);
         exporter.export();

@@ -1,7 +1,7 @@
 package com.example.FinalProject.domain.service;
 
-import com.example.FinalProject.pestistence.entity.Roles;
-import com.example.FinalProject.pestistence.entity.Student;
+import com.example.FinalProject.domain.model.RolesModel;
+import com.example.FinalProject.domain.model.StudentModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,18 +15,18 @@ import java.util.Set;
 @Slf4j
 public class StudentDetailsImpl implements UserDetails {
 
-    private final Student student;
+    private final StudentModel student;
 
-    public StudentDetailsImpl(Student student) {
+    public StudentDetailsImpl(StudentModel student) {
         this.student = student;
         log.info(student.toString());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Roles> roles = student.getRolesSet();
+        Set<RolesModel> roles = student.getRolesSet();
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        for (Roles roles1 : roles) {
+        for (RolesModel roles1 : roles) {
             authorityList.add(new SimpleGrantedAuthority(roles1.name()));
         }
         return authorityList;

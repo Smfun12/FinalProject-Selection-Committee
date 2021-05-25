@@ -1,15 +1,14 @@
 package com.example.FinalProject.domain.model;
 
-import com.example.FinalProject.pestistence.entity.Faculty;
-import com.example.FinalProject.pestistence.entity.Roles;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 public class StudentModel {
 
     private long studentid;
@@ -26,14 +25,13 @@ public class StudentModel {
 
     private String school;
 
-    public boolean budget = true;
+    public boolean budget;
 
-    private Set<String> faculties
-            = new HashSet<>();
+    private Set<String> faculties;
 
-    private Set<Roles> rolesSet;
+    private Set<RolesModel> rolesSet;
 
-    private boolean enabled = true;
+    private boolean enabled;
 
     private int firstGrade;
 

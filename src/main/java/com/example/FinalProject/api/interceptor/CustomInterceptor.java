@@ -1,9 +1,7 @@
 package com.example.FinalProject.api.interceptor;
 
-import com.example.FinalProject.api.dto.SaveHeaders;
+import com.example.FinalProject.api.dto.HeaderStorage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,11 +13,11 @@ import java.util.Enumeration;
 @Component
 public class CustomInterceptor implements HandlerInterceptor {
 
-    SaveHeaders saveHeaders;
+    HeaderStorage headerStorage;
 
     @Autowired
-    public void setSaveHeaders(SaveHeaders saveHeaders) {
-        this.saveHeaders = saveHeaders;
+    public void setSaveHeaders(HeaderStorage headerStorage) {
+        this.headerStorage = headerStorage;
     }
 
     @Override
@@ -30,7 +28,7 @@ public class CustomInterceptor implements HandlerInterceptor {
             while (headerNames.hasMoreElements()) {
                 String name = headerNames.nextElement();
                 if (name.equals("jdbc")){
-                    saveHeaders.setHeader(name);
+                    headerStorage.setHeader(name);
                 }
             }
         }

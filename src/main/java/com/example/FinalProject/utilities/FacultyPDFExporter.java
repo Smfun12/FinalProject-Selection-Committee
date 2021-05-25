@@ -1,6 +1,6 @@
 package com.example.FinalProject.utilities;
 
-import com.example.FinalProject.pestistence.entity.Faculty;
+import com.example.FinalProject.domain.model.FacultyModel;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
@@ -15,9 +15,9 @@ import java.util.List;
  * Class for exporting faculties to pdf format
  */
 public class FacultyPDFExporter {
-    private final List<Faculty> faculties;
+    private final List<FacultyModel> faculties;
 
-    public FacultyPDFExporter(List<Faculty> faculties){
+    public FacultyPDFExporter(List<FacultyModel> faculties){
         this.faculties = faculties;
     }
 
@@ -50,7 +50,7 @@ public class FacultyPDFExporter {
     }
 
     private void writeTableData(PdfPTable table) {
-        for (Faculty faculty : faculties) {
+        for (FacultyModel faculty : faculties) {
             table.addCell(String.valueOf(faculty.getFacultyid()));
             table.addCell(faculty.getTitle());
             table.addCell(String.valueOf(faculty.getTotalPlaces()));

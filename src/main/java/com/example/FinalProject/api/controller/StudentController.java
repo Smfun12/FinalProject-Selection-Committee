@@ -1,11 +1,9 @@
 package com.example.FinalProject.api.controller;
 
-import com.example.FinalProject.api.mapper.StudentMapper;
+import com.example.FinalProject.domain.model.FacultyModel;
 import com.example.FinalProject.domain.model.StudentModel;
 import com.example.FinalProject.domain.service.FacultyService;
 import com.example.FinalProject.domain.service.StudentService;
-import com.example.FinalProject.pestistence.entity.Faculty;
-import com.example.FinalProject.pestistence.entity.Student;
 import com.example.FinalProject.utilities.StudentPDFExporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -45,7 +43,7 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findStudent")
-    public List<Student> findStudent() {
+    public List<StudentModel> findStudent() {
         return findPaginated(1, "studentid", "asc");
     }
 
@@ -57,12 +55,12 @@ public class StudentController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/filterStudent")
-    public List<Student> find(@RequestParam String filter) {
-        List<Student> students;
+    public List<StudentModel> find(@RequestParam String filter) {
+        List<StudentModel> students;
         if (filter != null && filter.isEmpty()) {
             students = studentService.getStudents();
         } else {
-            Optional<Student> student = studentService.findByEmail(filter);
+            Optional<StudentModel> student = studentService.findByEmail(filter);
             students = new LinkedList<>();
             student.ifPresent(students::add);
         }
@@ -74,7 +72,7 @@ public class StudentController {
     @PostMapping("/student/addStudent")
     public StudentModel studentSave(
             @ModelAttribute("student") StudentModel studentModel) {
-        Optional<Student> student = StudentMapper.INSTANCE.studentModelTolStudent(studentModel);
+        Optional<StudentModel> student = Optional.ofNullable(studentModel);
         student.ifPresent(studentService::saveStudent);
         log.info("Save student");
         return studentModel;
@@ -84,17 +82,17 @@ public class StudentController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/showFormForUpdate/{studentid}")
     public StudentModel updateStudent(@PathVariable(value = "studentid") long studentid) {
-        Optional<Student> student = studentService.findStudentById(studentid);
+        Optional<StudentModel> student = studentService.findStudentById(studentid);
         if (!student.isPresent()) {
             return null;
         }
         log.info("Show edit student page");
-        return StudentMapper.INSTANCE.studentToModelStudent(student.get()).get();
+        return student.get();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/deleteStudent/{studentid}")
-    public List<Student> deleteStudent(@PathVariable(value = "studentid") long studentid) {
+    public List<StudentModel> deleteStudent(@PathVariable(value = "studentid") long studentid) {
         studentService.deleteStudentById(studentid);
         log.info("Deleted student successfully");
         return studentService.getStudents();
@@ -105,18 +103,19 @@ public class StudentController {
     public StudentModel disableStudent(@PathVariable(value = "studentid") long studentid) {
         studentService.disableStudentById(studentid);
         log.info("Disable student successfully");
-        return StudentMapper.INSTANCE.studentToModelStudent(studentService.findStudentById(studentid).get()).get();
+        Optional<StudentModel> studentById = studentService.findStudentById(studentid);
+        return studentById.orElse(null);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/enableStudent/{studentid}")
     public StudentModel enableStudent(@PathVariable(value = "studentid") long studentid) {
-        Optional<StudentModel> student = StudentMapper.INSTANCE.studentToModelStudent(studentService.findStudentById(studentid).get());
+        Optional<StudentModel> student = studentService.findStudentById(studentid);
         if (!student.isPresent()) {
             return null;
         }
         student.get().getFaculties().clear();
-        studentService.saveStudent(StudentMapper.INSTANCE.studentModelTolStudent(student.get()).get());
+        student.ifPresent(studentService::saveStudent);
         studentService.enableStudentById(studentid);
         log.info("Enable student successfully");
         return student.get();
@@ -138,7 +137,7 @@ public class StudentController {
                                      RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Optional<Student> student = studentService.findByLogin(currentPrincipalName);
+        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
         if (!student.isPresent()) {
             return "mainPage";
         }
@@ -184,7 +183,7 @@ public class StudentController {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Optional<StudentModel> student = StudentMapper.INSTANCE.studentToModelStudent(studentService.findByLogin(currentPrincipalName).get());
+        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
         if (!student.isPresent()) {
             return null;
         }
@@ -192,8 +191,8 @@ public class StudentController {
         student.get().setSecondGrade(Integer.parseInt(secondSubject));
         student.get().setThirdGrade(Integer.parseInt(thirdSubject));
         student.get().getFaculties().add(facultyService.findByFacultyById(facultyid).get().getTitle());
-        studentService.saveStudent(StudentMapper.INSTANCE.studentModelTolStudent(student.get()).get());
-        log.info("Student applied on faculty successfully");
+        student.ifPresent(studentService::saveStudent);
+        log.info("StudentModel applied on faculty successfully");
         return student.get();
     }
 
@@ -206,7 +205,7 @@ public class StudentController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/userProfile/{studentid}")
     public StudentModel userProfile(@PathVariable(value = "studentid") long studentid) {
-        Optional<StudentModel> student = StudentMapper.INSTANCE.studentToModelStudent(studentService.findStudentById(studentid).get());
+        Optional<StudentModel> student = studentService.findStudentById(studentid);
         if (!student.isPresent()) {
             return null;
         }
@@ -224,7 +223,7 @@ public class StudentController {
     public String userProfilePage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Optional<Student> student = studentService.findByLogin(currentPrincipalName);
+        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
         if (!student.isPresent()) {
             return "mainPage";
         }
@@ -244,15 +243,15 @@ public class StudentController {
     @PostMapping("/submitFaculty/{studentid}")
     public StudentModel submitFaculty(@PathVariable(value = "studentid") long studentid,
                                  @RequestParam String filter) {
-        Optional<StudentModel> student = StudentMapper.INSTANCE.studentToModelStudent(studentService.findStudentById(studentid).get());
-        Optional<Faculty> faculty = facultyService.findByFacultyById(Long.parseLong(filter));
+        Optional<StudentModel> student = studentService.findStudentById(studentid);
+        Optional<FacultyModel> faculty = facultyService.findByFacultyById(Long.parseLong(filter));
         if (!student.isPresent() || !faculty.isPresent()) {
             return null;
         }
         student.get().getFaculties().clear();
         student.get().getFaculties().add(faculty.get().getTitle());
         student.get().setEnabled(false);
-        studentService.saveStudent(StudentMapper.INSTANCE.studentModelTolStudent(student.get()).get());
+        student.ifPresent(studentService::saveStudent);
         log.info("Admin submitted faculty for student successfully");
         return student.get();
     }
@@ -267,14 +266,14 @@ public class StudentController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/student/page/{pageNo}")
-    public List<Student> findPaginated(
+    public List<StudentModel> findPaginated(
             @PathVariable(value = "pageNo") int pageNo,
             @RequestParam("sortField") String sortField,
             @RequestParam("sortDir") String sortDir) {
         int pageSize = 5;
 
-        Page<Student> page = studentService.findPaginated(pageNo, pageSize, sortField, sortDir);
-        List<Student> studentList = page.getContent();
+        Page<StudentModel> page = studentService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        List<StudentModel> studentList = page.getContent();
 
         log.info("Show student list with sorting");
         return studentList;
@@ -295,7 +294,7 @@ public class StudentController {
         String headerValue = "attachment; filename=students_" + currentDateTime + ".pdf";
         response.setHeader(headerKey, headerValue);
 
-        List<Student> studentList = studentService.getStudents();
+        List<StudentModel> studentList = studentService.getStudents();
 
         StudentPDFExporter exporter = new StudentPDFExporter(studentList);
         exporter.export();

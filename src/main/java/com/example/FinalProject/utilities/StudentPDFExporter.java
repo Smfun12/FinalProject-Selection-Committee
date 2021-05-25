@@ -1,7 +1,6 @@
 package com.example.FinalProject.utilities;
 
-import com.example.FinalProject.pestistence.entity.Faculty;
-import com.example.FinalProject.pestistence.entity.Student;
+import com.example.FinalProject.domain.model.StudentModel;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
@@ -18,9 +17,9 @@ import java.util.List;
  * Class for exporting students to pdf format
  */
 public class StudentPDFExporter {
-    private final List<Student> studentList;
+    private final List<StudentModel> studentList;
 
-    public StudentPDFExporter(List<Student> studentList) {
+    public StudentPDFExporter(List<StudentModel> studentList) {
         this.studentList = studentList;
     }
 
@@ -58,12 +57,9 @@ public class StudentPDFExporter {
      * @param table - current table
      */
     private void writeTableData(PdfPTable table) {
-        for (Student student : studentList) {
+        for (StudentModel student : studentList) {
             PdfPCell cell = new PdfPCell();
-            List<String> faculties = new ArrayList<>();
-            for (Faculty faculty : student.getFaculties()){
-                faculties.add(faculty.getTitle());
-            }
+            List<String> faculties = new ArrayList<>(student.getFaculties());
             if (student.isBudget()) {
                 cell.setBackgroundColor(Color.green);
                 cell.setPhrase(new Phrase(String.valueOf(student.getStudentid())));
@@ -78,7 +74,6 @@ public class StudentPDFExporter {
                 cell.setPhrase(new Phrase(student.getRolesSet().toString()));
                 table.addCell(cell);
                 cell.setBackgroundColor(Color.green);
-                cell.setPhrase(new Phrase(faculties.toString()));
             } else {
                 cell.setBackgroundColor(Color.red);
                 cell.setPhrase(new Phrase(String.valueOf(student.getStudentid())));
@@ -93,8 +88,8 @@ public class StudentPDFExporter {
                 cell.setPhrase(new Phrase(student.getRolesSet().toString()));
                 table.addCell(cell);
                 cell.setBackgroundColor(Color.red);
-                cell.setPhrase(new Phrase(faculties.toString()));
             }
+            cell.setPhrase(new Phrase(faculties.toString()));
             table.addCell(cell);
 
         }
