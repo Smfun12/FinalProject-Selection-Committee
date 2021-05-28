@@ -109,6 +109,10 @@ public class Faculty {
 
     }
 
+    public Faculty(@NotBlank @Length(min = 3) String title) {
+        this.title = title;
+    }
+
     public long getFacultyid() {
         return facultyid;
     }

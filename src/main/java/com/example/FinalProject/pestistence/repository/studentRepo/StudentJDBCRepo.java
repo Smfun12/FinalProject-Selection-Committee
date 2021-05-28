@@ -1,9 +1,7 @@
 package com.example.FinalProject.pestistence.repository.studentRepo;
 
-import com.example.FinalProject.pestistence.mapper.StudentRowMapper;
 import com.example.FinalProject.pestistence.entity.Student;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import com.example.FinalProject.pestistence.mapper.StudentRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -53,11 +51,6 @@ public class StudentJDBCRepo{
         Student student = findById(id);
         student.setEnabled(true);
         saveStudentToDb(student);
-    }
-
-    public Page<Student> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
-        List<Student> query = jdbcTemplate.query("SELECT * from students", new StudentRowMapper());
-        return new PageImpl<>(query);
     }
 
     public void enableStudentById(long studentid) {

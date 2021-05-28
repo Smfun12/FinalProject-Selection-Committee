@@ -6,8 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
  * Class search current user in session in db, and give corresponding authority
  */
@@ -23,13 +21,8 @@ public class StudentDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        Optional<StudentModel> student = studentService.findByLogin(username);
-
-        if (!student.isPresent()) {
-            throw new UsernameNotFoundException("Could not find user");
-        }
-
-        return new StudentDetailsImpl(student.get());
+        StudentModel student = studentService.findByLogin(username);
+        return new StudentDetailsImpl(student);
     }
 
 }

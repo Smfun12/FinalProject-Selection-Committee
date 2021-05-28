@@ -56,7 +56,10 @@ public class FacultyPDFExporter {
             table.addCell(String.valueOf(faculty.getTotalPlaces()));
             table.addCell(String.valueOf(faculty.getBudgetPlaces()));
             table.addCell(String.valueOf(faculty.getContractPlaces()));
-            table.addCell(String.valueOf(faculty.getStudents().size()));
+            if (faculty.getStudents() != null)
+                table.addCell(String.valueOf(faculty.getStudents().size()));
+            else
+                table.addCell(String.valueOf(0));
         }
     }
 

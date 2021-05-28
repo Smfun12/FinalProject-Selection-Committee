@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "students")
-public class Student implements Comparable<Student>{
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentid;
@@ -124,13 +124,6 @@ public class Student implements Comparable<Student>{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    @Override
-    public int compareTo(Student o) {
-        double avgThisGrade = (this.firstGrade + this.secondGrade + this.thirdGrade) / 3.0;
-        double avgThatGrade = (o.firstGrade + o.secondGrade + o.thirdGrade) / 3.0;
-        return -Double.compare(avgThisGrade,avgThatGrade);
     }
 
     public Student() {

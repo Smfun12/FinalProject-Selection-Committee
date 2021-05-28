@@ -1,5 +1,6 @@
 package com.example.FinalProject.utilities;
 
+import com.example.FinalProject.domain.model.FacultyModel;
 import com.example.FinalProject.domain.model.StudentModel;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
@@ -59,7 +60,6 @@ public class StudentPDFExporter {
     private void writeTableData(PdfPTable table) {
         for (StudentModel student : studentList) {
             PdfPCell cell = new PdfPCell();
-            List<String> faculties = new ArrayList<>(student.getFaculties());
             if (student.isBudget()) {
                 cell.setBackgroundColor(Color.green);
                 cell.setPhrase(new Phrase(String.valueOf(student.getStudentid())));
@@ -89,7 +89,13 @@ public class StudentPDFExporter {
                 table.addCell(cell);
                 cell.setBackgroundColor(Color.red);
             }
-            cell.setPhrase(new Phrase(faculties.toString()));
+            if (student.getFaculties() == null){
+                cell.setPhrase(new Phrase(""));
+            }
+            else {
+                List<FacultyModel> faculties = new ArrayList<>(student.getFaculties());
+                cell.setPhrase(new Phrase(faculties.toString()));
+            }
             table.addCell(cell);
 
         }

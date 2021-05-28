@@ -4,25 +4,23 @@ import com.example.FinalProject.api.dto.HeaderStorage;
 import com.example.FinalProject.domain.model.StudentModel;
 import com.example.FinalProject.pestistence.entity.Student;
 import com.example.FinalProject.pestistence.mapper.StudentMapper;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Repository
-public class StudentRepo implements StudentRepos{
+public class StudentRepo implements DefaultStudentRepository{
 
     private final StudentRepository studentRepository;
     private final StudentJDBCRepo studentJDBCRepo;
     private final HeaderStorage headerStorage;
 
-    public StudentRepo(StudentRepository studentRepository, StudentJDBCRepo studentJDBCRepo,
-                       ApplicationContext applicationContext) {
+    public StudentRepo(StudentRepository studentRepository, StudentJDBCRepo studentJDBCRepo) {
         this.studentRepository = studentRepository;
         this.studentJDBCRepo = studentJDBCRepo;
-        this.headerStorage = applicationContext.getBean("headerStorage", HeaderStorage.class);;
+        this.headerStorage = new HeaderStorage();
     }
 
     public List<StudentModel> getStudents() {
@@ -33,33 +31,53 @@ public class StudentRepo implements StudentRepos{
             return StudentMapper.INSTANCE.studentListToStudentModelList(studentRepository.findAll());
     }
 
-    public Optional<StudentModel> findByLogin(String login) {
+    public StudentModel findByLogin(String login) {
+        Optional<Student> byLogin;
         if (headerStorage.getHeader().equals("jdbc")){
-            return StudentMapper.INSTANCE.studentToModelStudent(studentJDBCRepo.findByLogin(login).get());
+            byLogin = studentJDBCRepo.findByLogin(login);
         }
-        return StudentMapper.INSTANCE.studentToModelStudent(studentRepository.findByLogin(login).get());
+        else {
+            byLogin = studentRepository.findByLogin(login);
+
+        }
+        if (!byLogin.isPresent()){
+            throw new NoSuchElementException("Student with such login not found");
+        }
+        return StudentMapper.INSTANCE.studentToModelStudent(byLogin.get());
     }
 
-    public Optional<StudentModel> findByEmail(String email) {
+    public StudentModel findByEmail(String email) throws NoSuchElementException{
+        Optional<Student> byEmail;
         if (headerStorage.getHeader().equals("jdbc")){
-            return StudentMapper.INSTANCE.studentToModelStudent(studentJDBCRepo.findByEmail(email).get());
+            byEmail = studentJDBCRepo.findByEmail(email);
         }
-        return StudentMapper.INSTANCE.studentToModelStudent(studentRepository.findByEmail(email).get());
+        else {
+            byEmail = studentRepository.findByEmail(email);
+        }
+        if (!byEmail.isPresent())
+            throw new NoSuchElementException("No student with such email found");
+        return StudentMapper.INSTANCE.studentToModelStudent(byEmail.get());
     }
 
-    public Optional<StudentModel> findStudentById(long id) {
+    public StudentModel findStudentById(long id) {
+        Optional<Student> byId;
         if (headerStorage.getHeader().equals("jdbc")){
-            return StudentMapper.INSTANCE.studentToModelStudent(studentJDBCRepo.findStudentById(id).get());
+            byId = studentJDBCRepo.findStudentById(id);
         }
-        return StudentMapper.INSTANCE.studentToModelStudent(studentRepository.findById(id).get());
+        else {
+            byId = studentRepository.findStudentByStudentid(id);
+        }
+        if (!byId.isPresent())
+            throw new NoSuchElementException("No student with such id found");
+        return StudentMapper.INSTANCE.studentToModelStudent(byId.get());
     }
 
     public void saveStudent(StudentModel student) {
         if (headerStorage.getHeader().equals("jdbc")) {
-            studentJDBCRepo.saveStudent(StudentMapper.INSTANCE.studentModelToStudent(student).get());
+            studentJDBCRepo.saveStudent(StudentMapper.INSTANCE.studentModelToStudent(student));
         }
         else
-            studentRepository.save(StudentMapper.INSTANCE.studentModelToStudent(student).get());
+            studentRepository.save(StudentMapper.INSTANCE.studentModelToStudent(student));
     }
 
     public void deleteStudentById(long id) {
@@ -72,9 +90,7 @@ public class StudentRepo implements StudentRepos{
 
     public void disableStudentById(long id) {
         if (headerStorage.getHeader().equals("jdbc")){
-            Optional<Student> student = studentJDBCRepo.findStudentById(id);
-            student.ifPresent(value -> value.setEnabled(false));
-            student.ifPresent(studentJDBCRepo::saveStudent);
+            studentJDBCRepo.disableStudentById(id);
         }
         else {
             Optional<Student> student = studentRepository.findStudentByStudentid(id);
@@ -83,19 +99,9 @@ public class StudentRepo implements StudentRepos{
         }
     }
 
-    public Page<StudentModel> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
-//        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortField).ascending():
-//                Sort.by(sortField).descending();
-//        Pageable pageable = PageRequest.of(pageNo-1, pageSize,sort);
-//        return studentRepository.findAll(pageable);
-        return null;
-    }
-
     public void enableStudentById(long studentid) {
         if (headerStorage.getHeader().equals("jdbc")){
-            Optional<Student> student = studentJDBCRepo.findStudentById(studentid);
-            student.ifPresent(value -> value.setEnabled(true));
-            student.ifPresent(studentJDBCRepo::saveStudent);
+            studentJDBCRepo.enableStudentById(studentid);
         }
         else {
             Optional<Student> student = studentRepository.findStudentByStudentid(studentid);

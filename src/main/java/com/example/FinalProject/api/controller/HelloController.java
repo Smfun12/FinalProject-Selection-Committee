@@ -41,13 +41,15 @@ public class HelloController {
         List<FacultyModel> facultyList = facultyService.getFaculties();
         for (FacultyModel faculty : facultyList){
             int budgetPlaces = faculty.getBudgetPlaces();
-            Set<Long> students = faculty.getStudents();
-            List<Long> studentList = new ArrayList<>(students);
+            Set<StudentModel> students = faculty.getStudents();
+            if (students == null){
+                continue;
+            }
+            List<StudentModel> studentList = new ArrayList<>(students);
             Collections.sort(studentList);
-            for (Long id : studentList){
-                StudentModel student = studentService.findStudentById(id).get();
-                student.setBudget(budgetPlaces-- > 0);
-                studentService.saveStudent(student);
+            for (StudentModel studentModel : studentList){
+                studentModel.setBudget(budgetPlaces-- > 0);
+                studentService.saveStudent(studentModel);
             }
         }
         log.info("Finalizing result");

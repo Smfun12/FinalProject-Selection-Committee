@@ -6,22 +6,17 @@ import com.example.FinalProject.domain.service.FacultyService;
 import com.example.FinalProject.domain.service.StudentService;
 import com.example.FinalProject.utilities.StudentPDFExporter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Controller for student performs crud operations
@@ -29,7 +24,6 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@PreAuthorize("hasAuthority('ADMIN')")
 public class StudentController {
 
     private final StudentService studentService;
@@ -41,10 +35,10 @@ public class StudentController {
         this.facultyService = facultyService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findStudent")
     public List<StudentModel> findStudent() {
-        return findPaginated(1, "studentid", "asc");
+        return studentService.getStudents();
     }
 
     /**
@@ -53,16 +47,21 @@ public class StudentController {
      * @param filter - search
      * @return page
      */
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/filterStudent")
-    public List<StudentModel> find(@RequestParam String filter) {
+    public Object find(@RequestParam String filter) {
         List<StudentModel> students;
         if (filter != null && filter.isEmpty()) {
             students = studentService.getStudents();
         } else {
-            Optional<StudentModel> student = studentService.findByEmail(filter);
             students = new LinkedList<>();
-            student.ifPresent(students::add);
+            try {
+                StudentModel student = studentService.findByEmail(filter);
+                students.add(student);
+            }
+            catch (NoSuchElementException e){
+                return e.getMessage();
+            }
         }
         log.info("Find student with filter: " + filter);
         return students;
@@ -82,12 +81,9 @@ public class StudentController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/showFormForUpdate/{studentid}")
     public StudentModel updateStudent(@PathVariable(value = "studentid") long studentid) {
-        Optional<StudentModel> student = studentService.findStudentById(studentid);
-        if (!student.isPresent()) {
-            return null;
-        }
+        StudentModel student = studentService.findStudentById(studentid);
         log.info("Show edit student page");
-        return student.get();
+        return student;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -103,51 +99,19 @@ public class StudentController {
     public StudentModel disableStudent(@PathVariable(value = "studentid") long studentid) {
         studentService.disableStudentById(studentid);
         log.info("Disable student successfully");
-        Optional<StudentModel> studentById = studentService.findStudentById(studentid);
-        return studentById.orElse(null);
+        return studentService.findStudentById(studentid);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/enableStudent/{studentid}")
     public StudentModel enableStudent(@PathVariable(value = "studentid") long studentid) {
-        Optional<StudentModel> student = studentService.findStudentById(studentid);
-        if (!student.isPresent()) {
-            return null;
-        }
-        student.get().getFaculties().clear();
-        student.ifPresent(studentService::saveStudent);
+        StudentModel student = studentService.findStudentById(studentid);
+
+        student.getFaculties().clear();
+        studentService.saveStudent(student);
         studentService.enableStudentById(studentid);
         log.info("Enable student successfully");
-        return student.get();
-    }
-
-    /**
-     * Show to student page for applying on faculty,
-     * if student is already applied by admin on faculty, he is disabled
-     * and cannot apply anymore
-     *
-     * @param facultyid          - selected faculty
-     * @param redirectAttributes - show error
-     * @return page
-     */
-    @Transactional
-    @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/applyForFaculty/{facultyid}")
-    public String applyOnFacultyPage(@PathVariable(value = "facultyid") long facultyid,
-                                     RedirectAttributes redirectAttributes) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
-        if (!student.isPresent()) {
-            return "mainPage";
-        }
-        if (!student.get().isEnabled()) {
-            log.info("student already applied");
-            redirectAttributes.addFlashAttribute("applied", "You are already applied");
-            return "redirect:/findFaculty";
-        }
-        log.info("Show apply on faculty page");
-        return "applyOnFaculty";
+        return student;
     }
 
     /**
@@ -183,17 +147,14 @@ public class StudentController {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
-        if (!student.isPresent()) {
-            return null;
-        }
-        student.get().setFirstGrade(Integer.parseInt(firstSubject));
-        student.get().setSecondGrade(Integer.parseInt(secondSubject));
-        student.get().setThirdGrade(Integer.parseInt(thirdSubject));
-        student.get().getFaculties().add(facultyService.findByFacultyById(facultyid).get().getTitle());
-        student.ifPresent(studentService::saveStudent);
+        StudentModel student = studentService.findByLogin(currentPrincipalName);
+        student.setFirstGrade(Integer.parseInt(firstSubject));
+        student.setSecondGrade(Integer.parseInt(secondSubject));
+        student.setThirdGrade(Integer.parseInt(thirdSubject));
+        student.getFaculties().add(facultyService.findByFacultyById(facultyid));
+        studentService.saveStudent(student);
         log.info("StudentModel applied on faculty successfully");
-        return student.get();
+        return student;
     }
 
     /**
@@ -205,30 +166,10 @@ public class StudentController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/userProfile/{studentid}")
     public StudentModel userProfile(@PathVariable(value = "studentid") long studentid) {
-        Optional<StudentModel> student = studentService.findStudentById(studentid);
-        if (!student.isPresent()) {
-            return null;
-        }
-        log.info("Show user profile page");
-        return student.get();
-    }
+        StudentModel student = studentService.findStudentById(studentid);
 
-    /**
-     * This method is called, when user or admin click in navbar on own login
-     *
-     * @return user profile page
-     */
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("/userProfile")
-    public String userProfilePage() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        Optional<StudentModel> student = studentService.findByLogin(currentPrincipalName);
-        if (!student.isPresent()) {
-            return "mainPage";
-        }
         log.info("Show user profile page");
-        return "userProfile";
+        return student;
     }
 
     /**
@@ -243,40 +184,15 @@ public class StudentController {
     @PostMapping("/submitFaculty/{studentid}")
     public StudentModel submitFaculty(@PathVariable(value = "studentid") long studentid,
                                  @RequestParam String filter) {
-        Optional<StudentModel> student = studentService.findStudentById(studentid);
-        Optional<FacultyModel> faculty = facultyService.findByFacultyById(Long.parseLong(filter));
-        if (!student.isPresent() || !faculty.isPresent()) {
-            return null;
-        }
-        student.get().getFaculties().clear();
-        student.get().getFaculties().add(faculty.get().getTitle());
-        student.get().setEnabled(false);
-        student.ifPresent(studentService::saveStudent);
+        StudentModel student = studentService.findStudentById(studentid);
+        FacultyModel faculty = facultyService.findByFacultyById(Long.parseLong(filter));
+
+        student.getFaculties().clear();
+        student.getFaculties().add(faculty);
+        student.setEnabled(false);
+        studentService.saveStudent(student);
         log.info("Admin submitted faculty for student successfully");
-        return student.get();
-    }
-
-    /**
-     * Show studentList page with sorting
-     *
-     * @param pageNo    - current page
-     * @param sortField - sort by
-     * @param sortDir   - sort direction (asc of desc)
-     * @return studentList page with sorting
-     */
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/student/page/{pageNo}")
-    public List<StudentModel> findPaginated(
-            @PathVariable(value = "pageNo") int pageNo,
-            @RequestParam("sortField") String sortField,
-            @RequestParam("sortDir") String sortDir) {
-        int pageSize = 5;
-
-        Page<StudentModel> page = studentService.findPaginated(pageNo, pageSize, sortField, sortDir);
-        List<StudentModel> studentList = page.getContent();
-
-        log.info("Show student list with sorting");
-        return studentList;
+        return student;
     }
 
     /**

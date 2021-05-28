@@ -46,16 +46,15 @@ public class RegistrationController {
             log.info(result.getAllErrors().toString());
             return null;
         }
-        StudentModel student2 = StudentModel.builder().
-                email(student.getEmail())
-                .login(student.getLogin())
-                .password(passwordEncoder.encode(student.getPassword()))
-                .city(student.getCity())
-                .district(student.getDistrict())
-                .school(student.getSchool())
-                .rolesSet(Collections.singleton(RolesModel.USER))
-                .budget(false)
-                .build();
+        StudentModel student2 = new StudentModel(student.getStudentid(),
+                student.getEmail(),
+                student.getLogin(),
+                passwordEncoder.encode(student.getPassword()),
+                student.getCity(),
+                student.getDistrict(),
+                student.getSchool(),
+                Collections.singleton(RolesModel.USER),
+                false);
         log.info(student2.toString());
         try {
             studentService.saveStudent(student2);

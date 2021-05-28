@@ -8,8 +8,16 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-//@Scope("prototype")
+@Scope("request")
 public class HeaderStorage {
 
-    private String header;
+    private String header = "";
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
 }

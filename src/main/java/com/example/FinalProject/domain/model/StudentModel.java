@@ -1,6 +1,5 @@
 package com.example.FinalProject.domain.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +7,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
-public class StudentModel {
+public class StudentModel implements Comparable<StudentModel>{
 
     private long studentid;
 
@@ -27,7 +25,7 @@ public class StudentModel {
 
     public boolean budget;
 
-    private Set<String> faculties;
+    private Set<FacultyModel> faculties;
 
     private Set<RolesModel> rolesSet;
 
@@ -38,4 +36,24 @@ public class StudentModel {
     private int secondGrade;
 
     private int thirdGrade;
+
+    public StudentModel(long studentid, String email, String login, String password, String city, String district,
+                        String school,Set<RolesModel> rolesSet,  boolean budget) {
+        this.studentid = studentid;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.city = city;
+        this.district = district;
+        this.school = school;
+        this.budget = budget;
+        this.rolesSet = rolesSet;
+    }
+
+    @Override
+    public int compareTo(StudentModel o) {
+        double avgThisGrade = (this.firstGrade + this.secondGrade + this.thirdGrade) / 3.0;
+        double avgThatGrade = (o.firstGrade + o.secondGrade + o.thirdGrade) / 3.0;
+        return -Double.compare(avgThisGrade,avgThatGrade);
+    }
 }

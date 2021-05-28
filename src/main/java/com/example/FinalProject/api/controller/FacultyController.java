@@ -5,7 +5,6 @@ import com.example.FinalProject.domain.service.FacultyService;
 import com.example.FinalProject.utilities.FacultyPDFExporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,66 +14,56 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Class for performing crud operations on Faculty entity
  */
-@RestController
-@PreAuthorize("hasAuthority('ADMIN')")
 @Slf4j
+@RestController
 public class FacultyController {
 
-    private FacultyService facultyService;
+    private final FacultyService facultyService;
 
     ResourceBundleMessageSource messageSource;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
-    }
-
-    public FacultyController(){
         messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("lang/res");
     }
 
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/faculties")
     public List<FacultyModel> facultyList() {
-        return findFacultyPaginated(1, "title", "asc");
+        return facultyService.getFaculties();
     }
     /**
      * Search faculty with filter
      * @param filter - search
      * @return page
      */
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @PostMapping("/filterFaculty")
-    public List<FacultyModel> findFaculty(@RequestParam String filter) {
+    public Object findFaculty(@RequestParam String filter) {
         List<FacultyModel> faculties;
         if (filter != null && filter.isEmpty()) {
             faculties = facultyService.getFaculties();
             log.info("Find faculty with filter: " + filter);
         } else {
-            Optional<FacultyModel> faculty = facultyService.findByTitle(filter);
             faculties = new LinkedList<>();
-            faculty.ifPresent(faculties::add);
+            try {
+                FacultyModel faculty = facultyService.findByTitle(filter);
+                faculties.add(faculty);
+            }
+            catch (NoSuchElementException e){
+                return e.getMessage();
+            }
         }
         return faculties;
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/faculty/{faculty}")
-    public FacultyModel facultyEdit(@PathVariable FacultyModel faculty) {
-        log.info("Show edit page for current faculty");
-        return faculty;
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/faculty/page")
-    public String addFacultyPage() {
-        log.info("Show 'Add faculty' page");
-        return "addFaculty";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -89,15 +78,16 @@ public class FacultyController {
             return null;
         }
 
-        FacultyModel faculty2 = FacultyModel.builder()
-                .title(faculty.getTitle())
-                .totalPlaces(faculty.getTotalPlaces())
-                .budgetPlaces(faculty.getBudgetPlaces())
-                .contractPlaces(faculty.getContractPlaces())
-                .firstSubject(faculty.getFirstSubject())
-                .secondSubject(faculty.getSecondSubject())
-                .thirdSubject(faculty.getThirdSubject())
-                .build();
+        FacultyModel faculty2 = new FacultyModel(
+                faculty.getFacultyid(),
+                faculty.getTitle(),
+                faculty.getTotalPlaces(),
+                faculty.getBudgetPlaces(),
+                faculty.getContractPlaces(),
+                faculty.getFirstSubject(),
+                faculty.getSecondSubject(),
+                faculty.getThirdSubject()
+        );
         try {
             facultyService.saveFaculty(faculty2);
         } catch (Exception e) {
@@ -106,17 +96,6 @@ public class FacultyController {
         }
         log.info("Added faculty successfully");
         return faculty;
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/showFormForUpdateFaculty/{facultyid}")
-    public FacultyModel updateFaculty(@PathVariable(value = "facultyid") long facultyid) {
-        Optional<FacultyModel> faculty = facultyService.findByFacultyById(facultyid);
-        if (!faculty.isPresent()){
-            return null;
-        }
-        log.info("Show faculty edit page");
-        return faculty.get();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -134,28 +113,15 @@ public class FacultyController {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/studentList/{facultyid}")
-    public Set<Long> studentListPage(@PathVariable(value = "facultyid") long facultyid) {
-        Optional<FacultyModel> faculty = facultyService.findByFacultyById(facultyid);
-        if (!faculty.isPresent()){
-            return null;
+    public Object studentListPage(@PathVariable(value = "facultyid") long facultyid) {
+        try {
+            FacultyModel faculty = facultyService.findByFacultyById(facultyid);
+            log.info("Show students on current faculty");
+            return faculty.getStudents();
         }
-        log.info("Show students on current faculty");
-        return faculty.get().getStudents();
-    }
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("faculty/page/{pageNo}")
-    public List<FacultyModel> findFacultyPaginated(
-            @PathVariable(value = "pageNo") int pageNo,
-            @RequestParam("sortField") String sortField,
-            @RequestParam("sortDir") String sortDir) {
-        int pageSize = 5;
-
-        Page<FacultyModel> page = facultyService.findFacultyPaginated(pageNo, pageSize, sortField, sortDir);
-        List<FacultyModel> facultyList = page.getContent();
-
-        log.info("Show faculty list page");
-        return facultyList;
+        catch (NoSuchElementException e){
+            return e.getMessage();
+        }
     }
 
     @GetMapping("/faculties/export/pdf")

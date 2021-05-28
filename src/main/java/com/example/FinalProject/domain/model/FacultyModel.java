@@ -1,15 +1,12 @@
 package com.example.FinalProject.domain.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 public class FacultyModel {
 
     private long facultyid;
@@ -28,5 +25,17 @@ public class FacultyModel {
 
     private String thirdSubject;
 
-    private Set<Long> students = new HashSet<>();
+    private Set<StudentModel> students;
+
+    public FacultyModel(long facultyid, String title, int budgetPlaces, int contractPlaces, int totalPlaces,
+                        String firstSubject, String secondSubject, String thirdSubject) {
+        this.facultyid = facultyid;
+        this.title = title;
+        this.budgetPlaces = budgetPlaces;
+        this.contractPlaces = contractPlaces;
+        this.totalPlaces = totalPlaces;
+        this.firstSubject = firstSubject;
+        this.secondSubject = secondSubject;
+        this.thirdSubject = thirdSubject;
+    }
 }
