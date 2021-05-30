@@ -24,6 +24,7 @@ import java.util.*;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 public class StudentController {
 
     private final StudentService studentService;

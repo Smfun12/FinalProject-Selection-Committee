@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
  */
 @Slf4j
 @RestController
+@RequestMapping("/api")
 public class FacultyController {
 
     private final FacultyService facultyService;

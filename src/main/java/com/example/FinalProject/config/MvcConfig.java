@@ -1,6 +1,5 @@
 package com.example.FinalProject.config;
 
-import com.example.FinalProject.api.dto.HeaderStorage;
 import com.example.FinalProject.api.interceptor.CustomInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
