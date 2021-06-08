@@ -6,6 +6,7 @@ import com.example.FinalProject.pestistence.entity.Faculty;
 import com.example.FinalProject.pestistence.mapper.FacultyMapper;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,12 +16,12 @@ public class FacultyRepo implements DefaultFacultyRepository{
 
     private final FacultyJDBCRepo facultyJDBCRepo;
     private final FacultyRepository facultyRepository;
+    @Resource(name = "requestHeaderStorage")
     HeaderStorage headerStorage;
 
     public FacultyRepo(FacultyJDBCRepo facultyJDBCRepo, FacultyRepository facultyRepository) {
         this.facultyJDBCRepo = facultyJDBCRepo;
         this.facultyRepository = facultyRepository;
-        this.headerStorage = new HeaderStorage();
     }
 
     @Override

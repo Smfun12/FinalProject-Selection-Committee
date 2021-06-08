@@ -22,5 +22,6 @@ public class MyFilter implements Filter {
 
     @Override
     public void destroy() {
+        System.out.println("http://localhost:8080/swagger-ui.html");
     }
 }

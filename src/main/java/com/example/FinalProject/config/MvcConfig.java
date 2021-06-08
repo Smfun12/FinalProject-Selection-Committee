@@ -1,8 +1,10 @@
 package com.example.FinalProject.config;
 
+import com.example.FinalProject.api.dto.HeaderStorage;
 import com.example.FinalProject.api.interceptor.CustomInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -42,7 +44,8 @@ public class MvcConfig implements WebMvcConfigurer {
         interceptorRegistry.addInterceptor(customInterceptor());
     }
 
-    private HandlerInterceptor customInterceptor() {
+    @Bean
+    public HandlerInterceptor customInterceptor() {
         return new CustomInterceptor();
     }
 
@@ -50,5 +53,11 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
+    }
+
+    @Bean
+    @RequestScope
+    public HeaderStorage requestHeaderStorage(){
+        return new HeaderStorage();
     }
 }

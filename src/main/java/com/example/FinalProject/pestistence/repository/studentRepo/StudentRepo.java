@@ -6,6 +6,7 @@ import com.example.FinalProject.pestistence.entity.Student;
 import com.example.FinalProject.pestistence.mapper.StudentMapper;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,12 +16,13 @@ public class StudentRepo implements DefaultStudentRepository{
 
     private final StudentRepository studentRepository;
     private final StudentJDBCRepo studentJDBCRepo;
-    private final HeaderStorage headerStorage;
+
+    @Resource(name = "requestHeaderStorage")
+    private HeaderStorage headerStorage;
 
     public StudentRepo(StudentRepository studentRepository, StudentJDBCRepo studentJDBCRepo) {
         this.studentRepository = studentRepository;
         this.studentJDBCRepo = studentJDBCRepo;
-        this.headerStorage = new HeaderStorage();
     }
 
     public List<StudentModel> getStudents() {

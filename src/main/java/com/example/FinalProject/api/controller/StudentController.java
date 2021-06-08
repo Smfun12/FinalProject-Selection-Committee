@@ -6,6 +6,8 @@ import com.example.FinalProject.domain.service.FacultyService;
 import com.example.FinalProject.domain.service.StudentService;
 import com.example.FinalProject.utilities.StudentPDFExporter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +32,8 @@ public class StudentController {
     private final StudentService studentService;
 
     private final FacultyService facultyService;
-
+    @Autowired
+    ApplicationContext applicationContext;
     public StudentController(StudentService studentService, FacultyService facultyService) {
         this.studentService = studentService;
         this.facultyService = facultyService;

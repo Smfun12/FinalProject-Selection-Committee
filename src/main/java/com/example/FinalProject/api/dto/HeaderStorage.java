@@ -1,23 +1,9 @@
 package com.example.FinalProject.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Getter
-@Setter
-@Component
-@Scope("request")
+@Data
 public class HeaderStorage {
 
-    private String header = "";
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
+    private String header;
 }

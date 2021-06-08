@@ -13,6 +13,10 @@ public class FacultyJDBCRepo{
 
     JdbcTemplate jdbcTemplate;
 
+    public FacultyJDBCRepo(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public List<Faculty> getFaculties() {
         return jdbcTemplate.query("SELECT * FROM faculties", new FacultyRowMapper());
     }

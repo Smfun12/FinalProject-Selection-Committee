@@ -11,7 +11,7 @@ public class StudentRowMapper implements RowMapper<Student> {
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {
         Student student = new Student();
         student.setStudentid(resultSet.getLong("studentid"));
-        student.setLogin(resultSet.getString("name"));
+        student.setLogin(resultSet.getString("login"));
         student.setBudget(resultSet.getBoolean("budget"));
         student.setCity(resultSet.getString("city"));
         student.setDistrict(resultSet.getString("district"));
